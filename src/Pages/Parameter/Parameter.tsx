@@ -1,12 +1,13 @@
-import React from 'react';
-import './Parameter.css';
-import {Container, Box} from '@mui/material';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-
-import ResponsiveAppBar from '../../Components/AppBar/AppBar';
-import InputSlider from '../../Components/Slider/Slider';
+import React from "react";
+import "./Parameter.css";
+import { Container, Box } from "@mui/material";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import ResponsiveAppBar from "../../Components/AppBar/AppBar";
+import Training from "./Training/Training";
+import Session from "./Session/Session";
+import { GameModeParameters } from '../../interface/interface';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -16,7 +17,7 @@ interface TabPanelProps {
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
-
+  
   return (
     <div
       role="tabpanel"
@@ -37,42 +38,97 @@ function TabPanel(props: TabPanelProps) {
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
-
-
-function Parameter() {
+const Parameter = () => {
+  const pp = {
+    training: {
+        maxWaves: 2,
+        accuracies: [
+          {
+            wave: 1,
+            AICorrectProbability: 0.8,
+            humanCorrectProbability: 0.8,
+          },
+          {
+            wave: 2,
+            AICorrectProbability: 0.8,
+            humanCorrectProbability: 0.8,
+          },
+        ],
+        penalty: 15,
+        maliciousPacketProbability: 0.25,
+        intervalBetweenPackets: 0.5,
+        maxNumberOfPackets: 500,
+        minIntervalBetweenRuleChanges: 23,
+        maxIntervalBetweenRuleChanges: 40,
+        minHumanAdviceTimeInSeconds: 4,
+        maxHumanAdviceTimeInSeconds: 4,
+        minAIAdviceTimeInSeconds: 4,
+        maxAIAdviceTimeInSeconds: 4,
+        AIRandomSeed: 4583,
+        humanRandomSeed: 66305,
+        difficultyRatio: 0.8,
+      },
+    session: {
+        maxWaves: 1,
+        accuracies: [
+          {
+            wave: 1,
+            AICorrectProbability: 0.8,
+            humanCorrectProbability: 0.8,
+          },
+        ],
+        penalty: 15,
+        maliciousPacketProbability: 0.25,
+        intervalBetweenPackets: 0.5,
+        maxNumberOfPackets: 500,
+        minIntervalBetweenRuleChanges: 23,
+        maxIntervalBetweenRuleChanges: 40,
+        minHumanAdviceTimeInSeconds: 4,
+        maxHumanAdviceTimeInSeconds: 4,
+        minAIAdviceTimeInSeconds: 4,
+        maxAIAdviceTimeInSeconds: 4,
+        AIRandomSeed: 4583,
+        humanRandomSeed: 66305,
+        difficultyRatio: 0.8,
+      },
+    };
   const [value, setValue] = React.useState(0);
+  const [ parameters, setParameters ] = React.useState<GameModeParameters>(pp);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleSidlerChange = (
+    event: React.SyntheticEvent,
+    newValue: number
+  ) => {
     setValue(newValue);
   };
+
   return (
     <div className="Parameter">
-      <ResponsiveAppBar/>
+      <ResponsiveAppBar />
       <Container>
-        <Box>
-        <Typography> Parameter </Typography>
+        <Box sx={{ width: "100%" }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={value}
+              onChange={handleSidlerChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="Training" {...a11yProps(0)} />
+              <Tab label="Session" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <TabPanel value={value} index={0}>
+            <Training gameModeParameters={parameters} setParameters={setParameters}/>
+          </TabPanel>
+
+          <TabPanel value={value} index={1}>
+            <Session gameModeParameters={parameters} setParameters={setParameters}/>
+          </TabPanel>
         </Box>
-        <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Training" {...a11yProps(0)} />
-          <Tab label="Session" {...a11yProps(1)} />
-        </Tabs>
-      </Box>
-      <TabPanel value={value} index={0}>
-        Item One
-        <Box>
-          <InputSlider/>
-        </Box>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-    </Box>
       </Container>
     </div>
   );
