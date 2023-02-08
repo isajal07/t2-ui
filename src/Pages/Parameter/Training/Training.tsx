@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -86,14 +87,19 @@ const Training = (props: Props) => {
   const handleClose = () => {
     setOpenConfrim(false);
   };
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setLoading(true);
-    setTimeout(() => {
-      setOpenConfrim(false);
-      setLoading(false);
-    }, 3000);
+    setOpenConfrim(false);
+    setLoading(false);
+
+    await axios
+      .put("http://localhost:5001/api/updateParameters", gameModeParameters)
+      .then((response) => {
+        console.log(response.data);
+      });
+    setEnableSave(false);
     console.log(gameModeParameters);
-    // TODO: API POST REQUEST
+     
   };
 
   React.useEffect(() => {}, [gameModeParameters.training]);
@@ -138,9 +144,9 @@ const Training = (props: Props) => {
               <Grid item xs={5}>
                 <InputSlider
                   silderName="AI Correct Probability"
-                  min={0}
-                  max={1}
-                  step={0.1}
+                  min={0.00}
+                  max={1.00}
+                  step={0.01}
                   textFontSize={12}
                   onChange={(
                     event: Event,
@@ -164,9 +170,9 @@ const Training = (props: Props) => {
               <Grid item xs={5}>
                 <InputSlider
                   silderName="Human Correct Probability"
-                  min={0}
-                  max={1}
-                  step={0.1}
+                  min={0.00}
+                  max={1.00}
+                  step={0.01}
                   textFontSize={12}
                   onChange={(
                     event: Event,
@@ -201,7 +207,7 @@ const Training = (props: Props) => {
             <InputSlider
               silderName="Penalty"
               min={1}
-              max={100}
+              max={10}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
@@ -220,9 +226,9 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Malicious Packet Probability"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={1.00}
+              step={0.01}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
@@ -240,9 +246,9 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Interval Between Packets"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={2.00}
+              step={0.01}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
@@ -262,8 +268,8 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Max Number of Packets"
-              min={1}
-              max={100}
+              min={0}
+              max={500}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
@@ -282,9 +288,9 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Minimum Interval Between Rule Changes"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={200.00}
+              step={20}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
@@ -302,9 +308,9 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Maximum Interval Between Rule Changes"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={400.00}
+              step={20}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
@@ -330,8 +336,8 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Minimum Human Advice Time (sec.)"
-              min={1}
-              max={100}
+              min={0.00}
+              max={60.00}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
@@ -350,8 +356,8 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Maximum Human Advice Time (sec.)"
-              min={1}
-              max={100}
+              min={0.00}
+              max={60.00}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
@@ -370,8 +376,8 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Minimum AI Advice Time (sec.)"
-              min={1}
-              max={100}
+              min={0.00}
+              max={20.00}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
@@ -392,8 +398,8 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Maximum AI Advice Time (sec.)"
-              min={1}
-              max={100}
+              min={0.00}
+              max={20.00}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
@@ -420,8 +426,8 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="AI Random Seed"
-              min={1}
-              max={100}
+              min={0}
+              max={99999}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
@@ -440,8 +446,8 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Human Random Seed"
-              min={1}
-              max={100}
+              min={0}
+              max={99999}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
@@ -468,9 +474,9 @@ const Training = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Difficulty Ratio"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={1.00}
+              step={0.1}
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);

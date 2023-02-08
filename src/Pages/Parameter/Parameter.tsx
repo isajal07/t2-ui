@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import "./Parameter.css";
 import { Container, Box } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
@@ -8,6 +9,7 @@ import ResponsiveAppBar from "../../Components/AppBar/AppBar";
 import Training from "./Training/Training";
 import Session from "./Session/Session";
 import { GameModeParameters } from '../../interface/interface';
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -97,7 +99,7 @@ const Parameter = () => {
       },
     };
   const [value, setValue] = React.useState(0);
-  const [ parameters, setParameters ] = React.useState<GameModeParameters>(pp);
+  const [ parameters, setParameters ] = React.useState<GameModeParameters | null>(null);
 
   const handleSidlerChange = (
     event: React.SyntheticEvent,
@@ -105,6 +107,13 @@ const Parameter = () => {
   ) => {
     setValue(newValue);
   };
+
+  
+  React.useEffect(() => {
+      axios.get("http://localhost:5001/api/getParameters").then((response) => {
+        setParameters(response.data);
+      });
+  }, []);
 
   return (
     <div className="Parameter">
@@ -121,13 +130,21 @@ const Parameter = () => {
               <Tab label="Session" {...a11yProps(1)} />
             </Tabs>
           </Box>
+          { parameters ?
+          <>
           <TabPanel value={value} index={0}>
             <Training gameModeParameters={parameters} setParameters={setParameters}/>
           </TabPanel>
-
           <TabPanel value={value} index={1}>
             <Session gameModeParameters={parameters} setParameters={setParameters}/>
           </TabPanel>
+          </>
+          :
+            <Box textAlign="center" mt={4}>
+                <Box><CircularProgress size={25} /></Box>
+                <Box mt={2}>Loading parameters...</Box>
+            </Box>
+}
         </Box>
       </Container>
     </div>
