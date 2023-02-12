@@ -21,12 +21,15 @@ import { GameModeParameters } from "../../../interface/interface";
 interface Props {
   gameModeParameters: GameModeParameters;
   setParameters: (value: GameModeParameters) => void;
+  createMode: Boolean;
+  onCreateParameter: () => void;
+  openConfirm: boolean;
+  setOpenConfirm: (value: boolean) => void;
 }
 
 const Session = (props: Props) => {
-  const { gameModeParameters, setParameters } = props;
+  const { gameModeParameters, setParameters, createMode,  onCreateParameter, openConfirm, setOpenConfirm } = props;
   const numberOfWave = Array.from({ length: 20 }, (v, k) => k + 1);
-  const [openConfirm, setOpenConfrim] = React.useState(false);
   const [enableSave, setEnableSave] = React.useState(false);
 
   const onWaveChange = (event: any) => {
@@ -82,17 +85,17 @@ const Session = (props: Props) => {
   };
 
   const handleClose = () => {
-    setOpenConfrim(false);
+    setOpenConfirm(false);
   };
   const handleConfirm = () => {
-    setOpenConfrim(false);
+    setOpenConfirm(false);
     console.log(gameModeParameters);
     // TODO: API POST REQUEST 
   }
   React.useEffect(() => {
   }, [gameModeParameters.session]);
   const onSaveClicked = () => {
-    setOpenConfrim(true);
+    setOpenConfirm(true);
   };
   return (
     <Box>
@@ -132,9 +135,9 @@ const Session = (props: Props) => {
               <Grid item xs={5}>
                 <InputSlider
                   silderName="AI Correct Probability"
-                  min={0}
-                  max={1}
-                  step={0.1}
+                  min={0.00}
+                  max={1.00}
+                  step={0.01}
                   textFontSize={12}
                   onChange={(
                     event: Event,
@@ -158,9 +161,9 @@ const Session = (props: Props) => {
               <Grid item xs={5}>
                 <InputSlider
                   silderName="Human Correct Probability"
-                  min={0}
-                  max={1}
-                  step={0.1}
+                  min={0.00}
+                  max={1.00}
+                  step={0.01}
                   textFontSize={12}
                   onChange={(
                     event: Event,
@@ -195,7 +198,7 @@ const Session = (props: Props) => {
             <InputSlider
               silderName="Penalty"
               min={1}
-              max={100}
+              max={10}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
@@ -214,9 +217,9 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Malicious Packet Probability"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={1.00}
+              step={0.01}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
@@ -234,9 +237,9 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Interval Between Packets"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={2.00}
+              step={0.01}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
@@ -256,9 +259,9 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Max Number of Packets"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={200.00}
+              step={20}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
@@ -276,9 +279,9 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Minimum Interval Between Rule Changes"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={200.00}
+              step={20}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
@@ -296,9 +299,9 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Maximum Interval Between Rule Changes"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={400.00}
+              step={20}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
@@ -324,8 +327,8 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Minimum Human Advice Time (sec.)"
-              min={1}
-              max={100}
+              min={0.00}
+              max={60.00}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
@@ -344,8 +347,8 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Maximum Human Advice Time (sec.)"
-              min={1}
-              max={100}
+              min={0.00}
+              max={60.00}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
@@ -364,8 +367,8 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Minimum AI Advice Time (sec.)"
-              min={1}
-              max={100}
+              min={0.00}
+              max={20.00}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
@@ -386,8 +389,8 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Maximum AI Advice Time (sec.)"
-              min={1}
-              max={100}
+              min={0.00}
+              max={20.00}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
@@ -414,8 +417,8 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="AI Random Seed"
-              min={1}
-              max={100}
+              min={0}
+              max={99999}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
@@ -434,8 +437,8 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Human Random Seed"
-              min={1}
-              max={100}
+              min={0}
+              max={99999}
               step={1}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
@@ -462,9 +465,9 @@ const Session = (props: Props) => {
           <Grid item xs={3}>
             <InputSlider
               silderName="Difficulty Ratio"
-              min={1}
-              max={100}
-              step={1}
+              min={0.00}
+              max={1.00}
+              step={0.1}
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
@@ -503,12 +506,12 @@ const Session = (props: Props) => {
           <DialogTitle id="alert-dialog-title">{"Confirm"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-            Save <b>session</b> parameters changes?
+            {createMode? <>Create parameter?</> : <>Save <b>session</b> parameters changes?</>}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>No</Button>
-            <Button onClick={handleConfirm} autoFocus>
+            <Button onClick={createMode ? onCreateParameter:handleConfirm} autoFocus>
               Confirm
             </Button>
           </DialogActions>

@@ -1,19 +1,26 @@
 import React from 'react';
-import { Route, Routes } from "react-router-dom"
+
+import { useLocation, Route, Navigate, Outlet, Routes, Router } from "react-router-dom"
 import Parameter  from './Pages/Parameter/Parameter';
-import Data  from './Pages/Data/Data';
+import StudyData  from './Pages/StudyData/StudyData';
 import Game from './Pages/Game/Game';
 import Auth from './Pages/Auth/Auth';
-
+import Study from './Pages/StudyData/Studies/Study/Study';
+import UserData from './Pages/StudyData/UserData/UserData';
 import './App.css';
+import PrivateRoutes from './Components/PrivateRoutes/PrivateRoutes';
 
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Auth />} /> 
-      <Route path="/game" element={<Game />} /> 
-      <Route path="/parameter" element={<Parameter />} />
-      <Route path="/data" element={<Data />} />
+      <Route element={<PrivateRoutes />}>
+        <Route path="/game" element={<Game />} /> 
+        <Route path="/parameter" element={<Parameter />} />
+        <Route path="/studyData" element={<StudyData />} />
+        <Route path="/studyData/:studyDataId" element={<Study/>}/>
+        <Route path="/studyData/:studyDataId/userGameData/:userGameDataId" element={<UserData/>}/>
+      </Route>
     </Routes>
   );
 }

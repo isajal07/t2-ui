@@ -11,13 +11,15 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from "react-router-dom"
+import PersonIcon from '@mui/icons-material/Person';
+import ArrowDropDownSharpIcon from '@mui/icons-material/ArrowDropDownSharp';
 
-const pages = [{name:'Game', nav:'game'}, {name: 'Parameter', nav: 'parameter' }, {name: 'Data', nav:'data'}];
+const pages = [{name:'Game', nav:'game'}, {name: 'Parameter', nav: 'parameter' }, {name: 'Study Data', nav:'studyData'}];
 const settings = [{name:'Logout', nav:'logout'}];
 
 function ResponsiveAppBar() {
+  const admin = localStorage.getItem("token");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate(); 
@@ -39,15 +41,14 @@ function ResponsiveAppBar() {
 
   const onLogout = () => {
     navigate('/');
-    //TODO: Remove token from the local storage. 
+    localStorage.removeItem("token")
   };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
-            variant="h6"
             noWrap
             component="a"
             href="/game"
@@ -59,9 +60,10 @@ function ResponsiveAppBar() {
               letterSpacing: '.01em',
               color: 'inherit',
               textDecoration: 'none',
+              fontSize: '40px'
             }}
           >
-            T2 Admin Dashboard
+            T2
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -94,15 +96,13 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.name} onClick={()=>{handleCloseUserMenu(); navigate(`/${page.nav}`);}}>
+                <MenuItem key={page.name} href={page.nav} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
-            variant="h5"
             noWrap
             component="a"
             href=""
@@ -115,9 +115,10 @@ function ResponsiveAppBar() {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
+              fontSize: '35px'
             }}
           >
-            T2 Admin Dashboard
+            T2
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -125,7 +126,7 @@ function ResponsiveAppBar() {
                 key={page.name}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
-                href={page.nav}
+                href={`/${page.nav}`}
               >
                 {page.name}
               </Button>
@@ -135,7 +136,9 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <PersonIcon sx={{color:"white"}}/>
+                <Typography color={"white"} ml={1} mr={1}>{admin}</Typography>
+                <ArrowDropDownSharpIcon sx={{color:"white"}}/>
               </IconButton>
             </Tooltip>
             <Menu

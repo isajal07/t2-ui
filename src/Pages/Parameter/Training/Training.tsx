@@ -23,16 +23,20 @@ import CircularProgress from "@mui/material/CircularProgress";
 interface Props {
   gameModeParameters: GameModeParameters;
   setParameters: (value: GameModeParameters) => void;
+  createMode: Boolean;
+  onCreateParameter: () => void;
+  openConfirm: boolean;
+  setOpenConfirm: (value: boolean) => void;
 }
 
 const Training = (props: Props) => {
-  const { gameModeParameters, setParameters } = props;
+  const { gameModeParameters, setParameters, createMode, onCreateParameter, openConfirm, setOpenConfirm } = props;
   const numberOfWave = Array.from({ length: 20 }, (v, k) => k + 1);
-  const [openConfirm, setOpenConfrim] = React.useState(false);
   const [enableSave, setEnableSave] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
   const onWaveChange = (event: any) => {
+    setEnableSave(true);
     const updatedAccuracies = Array.from(
       Array(event.target.value),
       (_, index) => {
@@ -85,15 +89,15 @@ const Training = (props: Props) => {
   };
 
   const handleClose = () => {
-    setOpenConfrim(false);
+    setOpenConfirm(false);
   };
   const handleConfirm = async () => {
     setLoading(true);
-    setOpenConfrim(false);
+    setOpenConfirm(false);
     setLoading(false);
 
     await axios
-      .put("http://localhost:5001/api/updateParameters", gameModeParameters)
+      .put(`http://localhost:5001/api/updateParameters/${gameModeParameters._id}`, gameModeParameters)
       .then((response) => {
         console.log(response.data);
       });
@@ -102,9 +106,11 @@ const Training = (props: Props) => {
      
   };
 
-  React.useEffect(() => {}, [gameModeParameters.training]);
+  React.useEffect(() => {
+    if(createMode) setEnableSave(true);
+  }, [createMode]);
   const onSaveClicked = () => {
-    setOpenConfrim(true);
+    setOpenConfirm(true);
   };
   return (
     <Box>
@@ -524,12 +530,12 @@ const Training = (props: Props) => {
               <DialogTitle id="alert-dialog-title">{"Confrim"}</DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  Save <b>training</b> parameters changes?
+                  {createMode? <>Create parameter?</> : <>Save <b>training</b> parameters changes?</>}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>No</Button>
-                <Button onClick={handleConfirm} autoFocus>
+                <Button onClick={createMode? onCreateParameter : handleConfirm} autoFocus>
                   Confirm
                 </Button>
               </DialogActions>
