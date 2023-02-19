@@ -53,7 +53,7 @@ const Study = () => {
   }, []);
   const onRowClick = (userGameData:any) => {
     setSelectedUserData(userGameData)
-    navigate(`./userGameData/${userGameData.name}/${userGameData._id}`);
+    navigate(`./userGameData/${userGameData._id}`);
   };
   const downloadCSV = () => {
     console.log('download!')
