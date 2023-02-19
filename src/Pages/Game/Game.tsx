@@ -16,37 +16,43 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Link,
 } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import "./Game.css";
 import ResponsiveAppBar from "../../Components/AppBar/AppBar";
 const T2 = require("./T2.png");
 
 const Game = () => {
-  const [parameters, setParameters] = React.useState<any>({});
-  const [listOfParameters, setListOfParameters] = React.useState([]);
+  const [settings, setSettings] = React.useState<any>({});
+  const [listOfSettings, setListOfSettings] = React.useState([]);
 
   const [study, setStudy] = React.useState<any>({});
   const [listOfstudy, setListOfStudy] = React.useState<any>([]);
+  const [isLoading, setIsLoading] = React.useState<Boolean>(true);
 
   React.useEffect(() => {
-    axios.get("http://localhost:5001/api/getParameters").then((response) => {
-      setListOfParameters(response.data);
-      setParameters(
-        response.data.find((param: any) => param.isSelected === true)
-      );
-    });
-
-    axios.get("http://localhost:5001/api/getStudies").then((response) => {
-      setListOfStudy(response.data);
-      setStudy(response.data.find((param: any) => param.isSelected === true));
-    });
+      axios.get("http://localhost:5001/api/getSettings").then((response) => {
+        setListOfSettings(response.data);
+        setSettings(
+          response.data.find((param: any) => param.isSelected === true)
+          );
+        });
+        
+        axios.get("http://localhost:5001/api/getStudies").then((response) => {
+          setListOfStudy(response.data);
+          setStudy(response.data.find((param: any) => param.isSelected === true));
+        });
+        
+        setIsLoading(false);
   }, []);
 
-  const onParameterSelect = async (event: any) => {
-    setParameters(event.target.value);
+  const onSettingsSelect = async (event: any) => {
+    setSettings(event.target.value);
     await axios
       .put(
-        `http://localhost:5001/api/selectParameter/${event.target.value._id}`
+        `http://localhost:5001/api/selectSettings/${event.target.value._id}`
       )
       .then((response) => {});
   };
@@ -57,11 +63,14 @@ const Game = () => {
       .put(`http://localhost:5001/api/selectStudy/${event.target.value._id}`)
       .then((response) => {});
   };
-
-  console.log(parameters);
   return (
     <div className="Game">
       <ResponsiveAppBar />
+      {isLoading ? 
+      <Box textAlign={"center"}>
+        <Box mt={10}>Loading...</Box>
+        <Box mt={2}><CircularProgress size={25} /></Box>
+        </Box> :
       <Container>
         <Box>
         <Box m={10}>
@@ -83,15 +92,15 @@ const Game = () => {
               <FormControl size="small">
                 <Grid container>
                   <Grid item xs={5}>
-                    <Typography mt={1}>Select Parameter:</Typography>
+                    <Typography mt={1}>Select Settings:</Typography>
                   </Grid>
                   <Grid item xs={7}>
                     <Select
-                      value={parameters}
-                      onChange={onParameterSelect}
+                      value={settings}
+                      onChange={onSettingsSelect}
                       sx={{ width: 200 }}
                     >
-                      {listOfParameters?.map((param) => (
+                      {listOfSettings?.map((param) => (
                         //@ts-ignore
                         <MenuItem key={param._id} value={param}>
                           {/* @ts-ignore */}
@@ -157,6 +166,7 @@ const Game = () => {
                        <Typography gutterBottom variant="h5" component="div">
                   TAISER
                 </Typography>
+                  <Link href="https://www.cse.unr.edu/~sushil/taiser/Exp/" target="_blank"> TAISER Files Directory</Link>
                 </Box>
           <Box textAlign="center" mt={2}>
             <Button
@@ -174,6 +184,7 @@ const Game = () => {
         </Box>
         </Box>
       </Container>
+}
     </div>
   );
 };

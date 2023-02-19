@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom"
 import PersonIcon from '@mui/icons-material/Person';
 import ArrowDropDownSharpIcon from '@mui/icons-material/ArrowDropDownSharp';
 
-const pages = [{name:'Game', nav:'game'}, {name: 'Parameter', nav: 'parameter' }, {name: 'Study Data', nav:'studyData'}];
+const pages = [{name:'Game', nav:'game'}, {name: 'Settings', nav: 'settings' }, {name: 'Study Data', nav:'studyData'}];
 const settings = [{name:'Logout', nav:'logout'}];
 
 function ResponsiveAppBar() {

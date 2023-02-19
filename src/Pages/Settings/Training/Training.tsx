@@ -17,20 +17,20 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
 import "./Training.css";
-import { GameModeParameters } from "../../../interface/interface";
+import { GameModeSettings } from "../../../interface/interface";
 import CircularProgress from "@mui/material/CircularProgress";
 
 interface Props {
-  gameModeParameters: GameModeParameters;
-  setParameters: (value: GameModeParameters) => void;
+  gameModeSettings: GameModeSettings;
+  setSettings: (value: GameModeSettings) => void;
   createMode: Boolean;
-  onCreateParameter: () => void;
+  onCreateSettings: () => void;
   openConfirm: boolean;
   setOpenConfirm: (value: boolean) => void;
 }
 
 const Training = (props: Props) => {
-  const { gameModeParameters, setParameters, createMode, onCreateParameter, openConfirm, setOpenConfirm } = props;
+  const { gameModeSettings, setSettings, createMode, onCreateSettings, openConfirm, setOpenConfirm } = props;
   const numberOfWave = Array.from({ length: 20 }, (v, k) => k + 1);
   const [enableSave, setEnableSave] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -41,16 +41,16 @@ const Training = (props: Props) => {
       Array(event.target.value),
       (_, index) => {
         return {
-          ...gameModeParameters.training.accuracies[0],
+          ...gameModeSettings.training.accuracies[0],
           wave: index + 1,
         };
       }
     );
 
-    setParameters({
-      ...gameModeParameters,
+    setSettings({
+      ...gameModeSettings,
       training: {
-        ...gameModeParameters.training,
+        ...gameModeSettings.training,
         maxWaves: event.target.value,
         accuracies: updatedAccuracies,
       },
@@ -66,22 +66,22 @@ const Training = (props: Props) => {
   ) => {
     setEnableSave(true);
     if (humanOrAI === "AICorrectProbability") {
-      const copy = [...gameModeParameters.training.accuracies];
+      const copy = [...gameModeSettings.training.accuracies];
       copy[index].AICorrectProbability = newValue;
-      setParameters({
-        ...gameModeParameters,
+      setSettings({
+        ...gameModeSettings,
         training: {
-          ...gameModeParameters.training,
+          ...gameModeSettings.training,
           accuracies: copy,
         },
       });
     } else {
-      const copy = [...gameModeParameters.training.accuracies];
+      const copy = [...gameModeSettings.training.accuracies];
       copy[index].humanCorrectProbability = newValue;
-      setParameters({
-        ...gameModeParameters,
+      setSettings({
+        ...gameModeSettings,
         training: {
-          ...gameModeParameters.training,
+          ...gameModeSettings.training,
           accuracies: copy,
         },
       });
@@ -97,12 +97,12 @@ const Training = (props: Props) => {
     setLoading(false);
 
     await axios
-      .put(`http://localhost:5001/api/updateParameters/${gameModeParameters._id}`, gameModeParameters)
+      .put(`http://localhost:5001/api/updateSettings/${gameModeSettings._id}`, gameModeSettings)
       .then((response) => {
         console.log(response.data);
       });
     setEnableSave(false);
-    console.log(gameModeParameters);
+    console.log(gameModeSettings);
      
   };
 
@@ -125,7 +125,7 @@ const Training = (props: Props) => {
             </Grid>
             <Grid item xs={6}>
               <Select
-                value={gameModeParameters.training.maxWaves}
+                value={gameModeSettings.training.maxWaves}
                 onChange={onWaveChange}
                 sx={{ width: 200 }}
               >
@@ -139,7 +139,7 @@ const Training = (props: Props) => {
       </Box>
 
       <Box padding={2}>
-        {gameModeParameters.training.accuracies.map((_, i) => {
+        {gameModeSettings.training.accuracies.map((_, i) => {
           return (
             <Grid container>
               <Grid item xs={1}>
@@ -168,7 +168,7 @@ const Training = (props: Props) => {
                     )
                   }
                   value={
-                    gameModeParameters.training.accuracies[i]
+                    gameModeSettings.training.accuracies[i]
                       .AICorrectProbability
                   }
                 />
@@ -194,7 +194,7 @@ const Training = (props: Props) => {
                     )
                   }
                   value={
-                    gameModeParameters.training.accuracies[i]
+                    gameModeSettings.training.accuracies[i]
                       .humanCorrectProbability
                   }
                 />
@@ -218,15 +218,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     penalty: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.penalty}
+              value={gameModeSettings.training.penalty}
             />
           </Grid>
           <Grid item xs={3}>
@@ -238,15 +238,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     maliciousPacketProbability: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.maliciousPacketProbability}
+              value={gameModeSettings.training.maliciousPacketProbability}
             />
           </Grid>
           <Grid item xs={3}>
@@ -258,15 +258,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     intervalBetweenPackets: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.intervalBetweenPackets}
+              value={gameModeSettings.training.intervalBetweenPackets}
             />
           </Grid>
         </Grid>
@@ -280,15 +280,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     maxNumberOfPackets: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.maxNumberOfPackets}
+              value={gameModeSettings.training.maxNumberOfPackets}
             />
           </Grid>
           <Grid item xs={3}>
@@ -300,15 +300,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     minIntervalBetweenRuleChanges: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.minIntervalBetweenRuleChanges}
+              value={gameModeSettings.training.minIntervalBetweenRuleChanges}
             />
           </Grid>
           <Grid item xs={3}>
@@ -320,15 +320,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     maxIntervalBetweenRuleChanges: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.maxIntervalBetweenRuleChanges}
+              value={gameModeSettings.training.maxIntervalBetweenRuleChanges}
             />
           </Grid>
         </Grid>
@@ -348,15 +348,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     minHumanAdviceTimeInSeconds: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.minHumanAdviceTimeInSeconds}
+              value={gameModeSettings.training.minHumanAdviceTimeInSeconds}
             />
           </Grid>
           <Grid item xs={3}>
@@ -368,15 +368,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     maxHumanAdviceTimeInSeconds: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.maxHumanAdviceTimeInSeconds}
+              value={gameModeSettings.training.maxHumanAdviceTimeInSeconds}
             />
           </Grid>
           <Grid item xs={3}>
@@ -388,15 +388,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     minAIAdviceTimeInSeconds: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.minAIAdviceTimeInSeconds}
+              value={gameModeSettings.training.minAIAdviceTimeInSeconds}
             />
           </Grid>
         </Grid>
@@ -410,15 +410,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     maxAIAdviceTimeInSeconds: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.maxAIAdviceTimeInSeconds}
+              value={gameModeSettings.training.maxAIAdviceTimeInSeconds}
             />
           </Grid>
         </Grid>
@@ -438,15 +438,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     AIRandomSeed: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.AIRandomSeed}
+              value={gameModeSettings.training.AIRandomSeed}
             />
           </Grid>
           <Grid item xs={3}>
@@ -458,15 +458,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     humanRandomSeed: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.humanRandomSeed}
+              value={gameModeSettings.training.humanRandomSeed}
             />
           </Grid>
         </Grid>
@@ -486,15 +486,15 @@ const Training = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
-                setParameters({
-                  ...gameModeParameters,
+                setSettings({
+                  ...gameModeSettings,
                   training: {
-                    ...gameModeParameters.training,
+                    ...gameModeSettings.training,
                     difficultyRatio: newValue,
                   },
                 });
               }}
-              value={gameModeParameters.training.difficultyRatio}
+              value={gameModeSettings.training.difficultyRatio}
             />
           </Grid>
         </Grid>
@@ -530,12 +530,12 @@ const Training = (props: Props) => {
               <DialogTitle id="alert-dialog-title">{"Confrim"}</DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  {createMode? <>Create parameter?</> : <>Save <b>training</b> parameters changes?</>}
+                  {createMode? <>Create settings?</> : <>Save <b>training</b> settings changes?</>}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>No</Button>
-                <Button onClick={createMode? onCreateParameter : handleConfirm} autoFocus>
+                <Button onClick={createMode? onCreateSettings: handleConfirm} autoFocus>
                   Confirm
                 </Button>
               </DialogActions>

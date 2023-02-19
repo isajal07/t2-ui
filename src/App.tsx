@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useLocation, Route, Navigate, Outlet, Routes, Router } from "react-router-dom"
-import Parameter  from './Pages/Parameter/Parameter';
+import Settings  from './Pages/Settings/Settings';
 import StudyData  from './Pages/StudyData/StudyData';
 import Game from './Pages/Game/Game';
 import Auth from './Pages/Auth/Auth';
@@ -16,7 +16,7 @@ const App = () => {
       <Route path="/" element={<Auth />} /> 
       <Route element={<PrivateRoutes />}>
         <Route path="/game" element={<Game />} /> 
-        <Route path="/parameter" element={<Parameter />} />
+        <Route path="/settings" element={<Settings />} />
         <Route path="/studyData" element={<StudyData />} />
         <Route path="/studyData/:studyDataId" element={<Study/>}/>
         <Route path="/studyData/:studyDataId/userGameData/:userGameDataId" element={<UserData/>}/>

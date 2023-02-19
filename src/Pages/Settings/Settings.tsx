@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import "./Parameter.css";
+import "./Settings.css";
 import {
   Box,
   Button,
@@ -18,7 +18,7 @@ import Tab from "@mui/material/Tab";
 import ResponsiveAppBar from "../../Components/AppBar/AppBar";
 import Training from "./Training/Training";
 import Session from "./Session/Session";
-import { GameModeParameters, defaultParameters } from '../../interface/interface';
+import { GameModeSettings, defaultSettings } from '../../interface/interface';
 import CircularProgress from "@mui/material/CircularProgress";
 
 interface TabPanelProps {
@@ -66,18 +66,18 @@ const style = {
   p: 4,
 };
 
-const Parameter = () => {
+const Settings = () => {
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
-  const [listOfParameters, setListOfParameters] = React.useState<GameModeParameters[]>([]);
-  const [ parameters, setParameters ] = React.useState<GameModeParameters>(defaultParameters);
-  const [enableCreateParameterButton, setEnableCreateParameterButton] = React.useState(false);
+  const [listOfSettings, setListOfSettings] = React.useState<GameModeSettings[]>([]);
+  const [settings, setSettings] = React.useState<GameModeSettings>(defaultSettings);
+  const [enableCreateSettingsButton, setEnableCreateSettingsButton] = React.useState(false);
   const [createMode, setCreateMode] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const handleClose = () => setOpen(false);
-  const handleOpenCreateParameter = () => {
+  const handleOpenCreateSettings = () => {
     setOpen(true);
-    setParameters(defaultParameters);
+    setSettings(defaultSettings);
   }
   const handleSidlerChange = (
     event: React.SyntheticEvent,
@@ -87,32 +87,32 @@ const Parameter = () => {
   };
 
   React.useEffect(() => {
-      axios.get("http://localhost:5001/api/getParameters").then((response) => {
-        setListOfParameters(response.data)
-        setParameters(response.data.find((param:any) => param.isSelected === true))
+      axios.get("http://localhost:5001/api/getSettings").then((response) => {
+        setListOfSettings(response.data)
+        setSettings(response.data.find((param:any) => param.isSelected === true))
       });
   }, []);
 
-  const onCreateParameterButton = () => {
+  const onCreateSettingsButton = () => {
     setOpen(false);
     setCreateMode(true);
   };
 
-  const onCreateParameter = async () => {
+  const onCreateSettings = async () => {
     setOpenConfirm(false)
     await axios
-      .post("http://localhost:5001/api/createParameters", parameters)
+      .post("http://localhost:5001/api/createSettings", settings)
       .then((response) => {
-        setParameters(response.data);
+        setSettings(response.data);
       });
       window.location.reload();
   };
 
-  const onParameterSelect = (event:any) => {
-    setParameters(event.target.value);
+  const onSettingsSelect = (event:any) => {
+    setSettings(event.target.value);
   };
   return (
-    <div className="Parameter">
+    <div className="Settings">
       <ResponsiveAppBar />
       <Container>
       <div>
@@ -128,18 +128,18 @@ const Parameter = () => {
                 required
                 fullWidth
                 id="outlined-basic"
-                label="Enter parameter name"
+                label="Enter settings name"
                 variant="outlined"
                 color="primary"
                 size="small"
-                value={parameters.name}
+                value={settings.name}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   if (event.target.value) {
-                    setEnableCreateParameterButton(true);
+                    setEnableCreateSettingsButton(true);
                   } else {
-                    setEnableCreateParameterButton(false);
+                    setEnableCreateSettingsButton(false);
                   }
-                  setParameters({ ...parameters, name: event.target.value });
+                  setSettings({ ...settings, name: event.target.value });
                 }}
               />
             </Box>
@@ -152,9 +152,9 @@ const Parameter = () => {
                 rows={3}
                 variant="outlined"
                 label="Enter note..."
-                value={parameters.note}
+                value={settings.note}
                 onChange={(event) => {
-                  setParameters({ ...parameters, note: event.target.value });
+                  setSettings({ ...settings, note: event.target.value });
                 }}
               />
             </Box>
@@ -162,10 +162,10 @@ const Parameter = () => {
               <Button
                 variant="contained"
                 sx={{ padding: "4px 40px" }}
-                onClick={onCreateParameterButton}
-                disabled={!enableCreateParameterButton}
+                onClick={onCreateSettingsButton}
+                disabled={!enableCreateSettingsButton}
               >
-                Create Parameter
+                Create Settings
               </Button>
             </Box>
           </Box>
@@ -178,16 +178,16 @@ const Parameter = () => {
         
         <FormControl size="small">
           <Grid container>
-            <Grid item xs={5}>
-              <Typography mt={1}>Parameter(s):</Typography>
+            <Grid item xs={4}>
+              <Typography mt={1}>Settings:</Typography>
             </Grid>
-            <Grid item xs={7}>
+            <Grid item xs={8}>
               <Select
-                value={parameters}
-                onChange={onParameterSelect}
+                value={settings}
+                onChange={onSettingsSelect}
                 sx={{ width: 200 }}
               >
-                {listOfParameters?.map((param) => (
+                {listOfSettings?.map((param) => (
                   //@ts-ignore
                   <MenuItem value={param}>{param.name}</MenuItem>
                 ))}
@@ -201,15 +201,15 @@ const Parameter = () => {
           <Button
             variant="contained"
             sx={{ padding: "4px 12px" }}
-            onClick={handleOpenCreateParameter}
+            onClick={handleOpenCreateSettings}
           >
-            Create parameter
+            Create settings
           </Button>
         </Grid>
       </Grid>
 
-      <Box mt={2}><Typography fontSize={30}>{parameters?.name}</Typography></Box>
-      {parameters?.note && <Box><Typography fontStyle={"italic"}>Note: {parameters?.note}</Typography></Box>}
+      <Box mt={2}><Typography fontSize={30}>{settings?.name}</Typography></Box>
+      {settings?.note && <Box><Typography fontStyle={"italic"}>Note: {settings?.note}</Typography></Box>}
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -221,19 +221,19 @@ const Parameter = () => {
               <Tab label="Session" {...a11yProps(1)} />
             </Tabs>
           </Box>
-          { parameters ?
+          { settings ?
           <>
           <TabPanel value={value} index={0}>
-            <Training gameModeParameters={parameters} setParameters={setParameters} createMode={createMode} onCreateParameter={onCreateParameter} openConfirm={openConfirm} setOpenConfirm={setOpenConfirm}/>
+            <Training gameModeSettings={settings} setSettings={setSettings} createMode={createMode} onCreateSettings={onCreateSettings} openConfirm={openConfirm} setOpenConfirm={setOpenConfirm}/>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <Session gameModeParameters={parameters} setParameters={setParameters} createMode={createMode} onCreateParameter={onCreateParameter} openConfirm={openConfirm} setOpenConfirm={setOpenConfirm}/>
+            <Session gameModeSettings={settings} setSettings={setSettings} createMode={createMode} onCreateSettings={onCreateSettings} openConfirm={openConfirm} setOpenConfirm={setOpenConfirm}/>
           </TabPanel>
           </>
           :
             <Box textAlign="center" mt={4}>
                 <Box><CircularProgress size={25} /></Box>
-                <Box mt={2}>Loading parameters...</Box>
+                <Box mt={2}>Loading settings...</Box>
             </Box>
 }
         </Box>
@@ -242,4 +242,4 @@ const Parameter = () => {
   );
 }
 
-export default Parameter;
+export default Settings;

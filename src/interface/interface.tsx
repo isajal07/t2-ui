@@ -22,7 +22,7 @@ export interface Parameters {
   difficultyRatio: number;
 }
 
-export interface GameModeParameters {
+export interface GameModeSettings {
   _id?: string;
   name: string;
   note: string;
@@ -31,7 +31,7 @@ export interface GameModeParameters {
   session: Parameters;
 }
 
-export const defaultParameters = {
+export const defaultSettings = {
   name:"",
   note:"",
   isSelected: false,

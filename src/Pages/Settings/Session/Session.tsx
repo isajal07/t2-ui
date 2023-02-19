@@ -16,19 +16,19 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
 import "./Session.css";
-import { GameModeParameters } from "../../../interface/interface";
+import { GameModeSettings } from "../../../interface/interface";
 
 interface Props {
-  gameModeParameters: GameModeParameters;
-  setParameters: (value: GameModeParameters) => void;
+  gameModeSettings: GameModeSettings;
+  setSettings: (value: GameModeSettings) => void;
   createMode: Boolean;
-  onCreateParameter: () => void;
+  onCreateSettings: () => void;
   openConfirm: boolean;
   setOpenConfirm: (value: boolean) => void;
 }
 
 const Session = (props: Props) => {
-  const { gameModeParameters, setParameters, createMode,  onCreateParameter, openConfirm, setOpenConfirm } = props;
+  const { gameModeSettings, setSettings, createMode,  onCreateSettings, openConfirm, setOpenConfirm } = props;
   const numberOfWave = Array.from({ length: 20 }, (v, k) => k + 1);
   const [enableSave, setEnableSave] = React.useState(false);
 
@@ -37,16 +37,16 @@ const Session = (props: Props) => {
       Array(event.target.value),
       (_, index) => {
         return {
-          ...gameModeParameters.session.accuracies[0],
+          ...gameModeSettings.session.accuracies[0],
           wave: index + 1,
         };
       }
     );
 
-    setParameters({
-      ...gameModeParameters,
+    setSettings({
+      ...gameModeSettings,
       session: {
-        ...gameModeParameters.session,
+        ...gameModeSettings.session,
         maxWaves: event.target.value,
         accuracies: updatedAccuracies,
       },
@@ -62,22 +62,22 @@ const Session = (props: Props) => {
   ) => {
     setEnableSave(true);
     if (humanOrAI === "AICorrectProbability") {
-      const copy = [...gameModeParameters.session.accuracies];
+      const copy = [...gameModeSettings.session.accuracies];
       copy[index].AICorrectProbability = newValue;
-      setParameters({
-        ...gameModeParameters,
+      setSettings({
+        ...gameModeSettings,
         session: {
-          ...gameModeParameters.session,
+          ...gameModeSettings.session,
           accuracies: copy,
         },
       });
     } else {
-      const copy = [...gameModeParameters.session.accuracies];
+      const copy = [...gameModeSettings.session.accuracies];
       copy[index].humanCorrectProbability = newValue;
-      setParameters({
-        ...gameModeParameters,
+      setSettings({
+        ...gameModeSettings,
         session: {
-          ...gameModeParameters.session,
+          ...gameModeSettings.session,
           accuracies: copy,
         },
       });
@@ -89,11 +89,11 @@ const Session = (props: Props) => {
   };
   const handleConfirm = () => {
     setOpenConfirm(false);
-    console.log(gameModeParameters);
+    console.log(gameModeSettings);
     // TODO: API POST REQUEST 
   }
   React.useEffect(() => {
-  }, [gameModeParameters.session]);
+  }, [gameModeSettings.session]);
   const onSaveClicked = () => {
     setOpenConfirm(true);
   };
@@ -110,7 +110,7 @@ const Session = (props: Props) => {
             </Grid>
             <Grid item xs={6}>
               <Select
-                value={gameModeParameters.session.maxWaves}
+                value={gameModeSettings.session.maxWaves}
                 onChange={onWaveChange}
                 sx={{ width: 200 }}
               >
@@ -124,7 +124,7 @@ const Session = (props: Props) => {
       </Box>
 
       <Box padding={2}>
-        {gameModeParameters.session.accuracies.map((_, i) => {
+        {gameModeSettings.session.accuracies.map((_, i) => {
           return (
             <Grid container>
               <Grid item xs={1}>
@@ -153,7 +153,7 @@ const Session = (props: Props) => {
                     )
                   }
                   value={
-                    gameModeParameters.session.accuracies[i]
+                    gameModeSettings.session.accuracies[i]
                       .AICorrectProbability
                   }
                 />
@@ -179,7 +179,7 @@ const Session = (props: Props) => {
                     )
                   }
                   value={
-                    gameModeParameters.session.accuracies[i]
+                    gameModeSettings.session.accuracies[i]
                       .humanCorrectProbability
                   }
                 />
@@ -203,15 +203,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       penalty: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.penalty}
+              value={gameModeSettings.session.penalty}
             />
           </Grid>
           <Grid item xs={3}>
@@ -223,15 +223,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       maliciousPacketProbability: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.maliciousPacketProbability}
+              value={gameModeSettings.session.maliciousPacketProbability}
             />
           </Grid>
           <Grid item xs={3}>
@@ -243,15 +243,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       intervalBetweenPackets: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.intervalBetweenPackets}
+              value={gameModeSettings.session.intervalBetweenPackets}
             />
           </Grid>
         </Grid>
@@ -265,15 +265,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       maxNumberOfPackets: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.maxNumberOfPackets}
+              value={gameModeSettings.session.maxNumberOfPackets}
             />
           </Grid>
           <Grid item xs={3}>
@@ -285,15 +285,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       minIntervalBetweenRuleChanges: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.minIntervalBetweenRuleChanges}
+              value={gameModeSettings.session.minIntervalBetweenRuleChanges}
             />
           </Grid>
           <Grid item xs={3}>
@@ -305,15 +305,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       maxIntervalBetweenRuleChanges: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.maxIntervalBetweenRuleChanges}
+              value={gameModeSettings.session.maxIntervalBetweenRuleChanges}
             />
           </Grid>
         </Grid>
@@ -333,15 +333,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       minHumanAdviceTimeInSeconds: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.minHumanAdviceTimeInSeconds}
+              value={gameModeSettings.session.minHumanAdviceTimeInSeconds}
             />
           </Grid>
           <Grid item xs={3}>
@@ -353,15 +353,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       maxHumanAdviceTimeInSeconds: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.maxHumanAdviceTimeInSeconds}
+              value={gameModeSettings.session.maxHumanAdviceTimeInSeconds}
             />
           </Grid>
           <Grid item xs={3}>
@@ -373,15 +373,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       minAIAdviceTimeInSeconds: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.minAIAdviceTimeInSeconds}
+              value={gameModeSettings.session.minAIAdviceTimeInSeconds}
             />
           </Grid>
         </Grid>
@@ -395,15 +395,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       maxAIAdviceTimeInSeconds: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.maxAIAdviceTimeInSeconds}
+              value={gameModeSettings.session.maxAIAdviceTimeInSeconds}
             />
           </Grid>
         </Grid>
@@ -423,15 +423,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       AIRandomSeed: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.AIRandomSeed}
+              value={gameModeSettings.session.AIRandomSeed}
             />
           </Grid>
           <Grid item xs={3}>
@@ -443,15 +443,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       humanRandomSeed: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.humanRandomSeed}
+              value={gameModeSettings.session.humanRandomSeed}
             />
           </Grid>
         </Grid>
@@ -471,15 +471,15 @@ const Session = (props: Props) => {
               textFontSize={12}
               onChange={(event: Event, newValue: number,) => {
                 setEnableSave(true);
-                setParameters({
-                    ...gameModeParameters,
+                setSettings({
+                    ...gameModeSettings,
                     session: {
-                      ...gameModeParameters.session,
+                      ...gameModeSettings.session,
                       difficultyRatio: newValue
                     },
                   });
               }}
-              value={gameModeParameters.session.difficultyRatio}
+              value={gameModeSettings.session.difficultyRatio}
             />
           </Grid>
         </Grid>
@@ -506,12 +506,12 @@ const Session = (props: Props) => {
           <DialogTitle id="alert-dialog-title">{"Confirm"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-            {createMode? <>Create parameter?</> : <>Save <b>session</b> parameters changes?</>}
+            {createMode? <>Create settings?</> : <>Save <b>session</b> settings changes?</>}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>No</Button>
-            <Button onClick={createMode ? onCreateParameter:handleConfirm} autoFocus>
+            <Button onClick={createMode ? onCreateSettings:handleConfirm} autoFocus>
               Confirm
             </Button>
           </DialogActions>
