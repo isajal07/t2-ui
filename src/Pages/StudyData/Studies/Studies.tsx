@@ -38,7 +38,7 @@ const Studies = (props: { studies: any; }) => {
     const { studies } = props;
     const navigate = useNavigate(); 
     const onRowClick = (study:any) => {
-        navigate(`./${study._id}`);
+        navigate(`./${study.name}/${study._id}`);
     };
    
   return (
