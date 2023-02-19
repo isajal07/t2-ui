@@ -10,7 +10,7 @@ import Studies from "./Studies/Studies";
 const StudyData = () => {
 const [studies, setStudies] = React.useState([]);
 React.useEffect(() => {
-  axios.get("http://localhost:5001/api/getStudies").then((response) => {
+  axios.get(`${process.env.REACT_APP_API_URL}api/getStudies`).then((response) => {
     setStudies(response.data);
       });
 },[]);

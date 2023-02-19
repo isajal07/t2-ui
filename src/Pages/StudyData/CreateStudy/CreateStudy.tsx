@@ -36,7 +36,7 @@ const CreateStudy = () => {
   const handleClose = () => setOpen(false);
   const onCreateStudy = async () => {
     await axios
-      .post("http://localhost:5001/api/createStudy", studyData)
+      .post(`${process.env.REACT_APP_API_URL}api/createStudy`, studyData)
       .then((response) => {
         setStudyData(response.data);
       });

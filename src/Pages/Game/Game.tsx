@@ -33,14 +33,14 @@ const Game = () => {
   const [isLoading, setIsLoading] = React.useState<Boolean>(true);
 
   React.useEffect(() => {
-      axios.get("http://localhost:5001/api/getSettings").then((response) => {
+      axios.get(`${process.env.REACT_APP_API_URL}api/getSettings`).then((response) => {
         setListOfSettings(response.data);
         setSettings(
           response.data.find((param: any) => param.isSelected === true)
           );
         });
         
-        axios.get("http://localhost:5001/api/getStudies").then((response) => {
+        axios.get(`${process.env.REACT_APP_API_URL}api/getStudies`).then((response) => {
           setListOfStudy(response.data);
           setStudy(response.data.find((param: any) => param.isSelected === true));
         });
@@ -52,7 +52,7 @@ const Game = () => {
     setSettings(event.target.value);
     await axios
       .put(
-        `http://localhost:5001/api/selectSettings/${event.target.value._id}`
+        `${process.env.REACT_APP_API_URL}api/selectSettings/${event.target.value._id}`
       )
       .then((response) => {});
   };
@@ -60,7 +60,7 @@ const Game = () => {
   const onStudySelect = async (event: any) => {
     setStudy(event.target.value);
     await axios
-      .put(`http://localhost:5001/api/selectStudy/${event.target.value._id}`)
+      .put(`${process.env.REACT_APP_API_URL}api/selectStudy/${event.target.value._id}`)
       .then((response) => {});
   };
   return (

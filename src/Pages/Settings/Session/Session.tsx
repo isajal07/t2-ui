@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -17,6 +18,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
 import "./Session.css";
 import { GameModeSettings } from "../../../interface/interface";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface Props {
   gameModeSettings: GameModeSettings;
@@ -31,8 +33,10 @@ const Session = (props: Props) => {
   const { gameModeSettings, setSettings, createMode,  onCreateSettings, openConfirm, setOpenConfirm } = props;
   const numberOfWave = Array.from({ length: 20 }, (v, k) => k + 1);
   const [enableSave, setEnableSave] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const onWaveChange = (event: any) => {
+    setEnableSave(true);
     const updatedAccuracies = Array.from(
       Array(event.target.value),
       (_, index) => {
@@ -87,13 +91,20 @@ const Session = (props: Props) => {
   const handleClose = () => {
     setOpenConfirm(false);
   };
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
+    setLoading(true);
     setOpenConfirm(false);
-    console.log(gameModeSettings);
-    // TODO: API POST REQUEST 
+    setLoading(false);
+
+    await axios
+      .put(`${process.env.REACT_APP_API_URL}api/updateSettings/${gameModeSettings._id}`, gameModeSettings)
+      .then((response) => {
+        console.log(response.data);
+      });
+    setEnableSave(false);
+    window.location.reload();
   }
-  React.useEffect(() => {
-  }, [gameModeSettings.session]);
+
   const onSaveClicked = () => {
     setOpenConfirm(true);
   };
@@ -503,6 +514,15 @@ const Session = (props: Props) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
+          {loading ? (
+            <Box padding={8} pl={16} pr={16}>
+              <Box pl={2}>
+                <CircularProgress size={25} />
+              </Box>
+              <Typography> Saving... </Typography>
+            </Box>
+          ) : (
+            <>
           <DialogTitle id="alert-dialog-title">{"Confirm"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
@@ -515,6 +535,8 @@ const Session = (props: Props) => {
               Confirm
             </Button>
           </DialogActions>
+          </>
+          )}
         </Dialog>
       </div>
 

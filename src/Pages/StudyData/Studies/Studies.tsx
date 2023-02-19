@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Box, Button, Typography, Grid, Modal } from "@mui/material";
+import { Container, Box, Button, Typography, Grid, Modal, } from "@mui/material";
 import { alpha, styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useNavigate } from "react-router-dom"
 import { DateTime } from "luxon";
+
 
 import "./Studies.css";
 
@@ -39,6 +40,7 @@ const Studies = (props: { studies: any; }) => {
     const onRowClick = (study:any) => {
         navigate(`./${study._id}`);
     };
+   
   return (
    <Box mt={2}>
     <TableContainer component={Paper}>

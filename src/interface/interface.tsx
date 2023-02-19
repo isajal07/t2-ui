@@ -26,6 +26,7 @@ export interface GameModeSettings {
   _id?: string;
   name: string;
   note: string;
+  createdBy: string | null;
   isSelected: Boolean;
   training: Parameters;
   session: Parameters;
@@ -34,6 +35,7 @@ export interface GameModeSettings {
 export const defaultSettings = {
   name:"",
   note:"",
+  createdBy: "Default",
   isSelected: false,
   training: {
       maxWaves: 2,

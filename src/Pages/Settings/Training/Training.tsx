@@ -15,7 +15,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Alert from "@mui/material/Alert";
 import "./Training.css";
 import { GameModeSettings } from "../../../interface/interface";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -97,12 +96,12 @@ const Training = (props: Props) => {
     setLoading(false);
 
     await axios
-      .put(`http://localhost:5001/api/updateSettings/${gameModeSettings._id}`, gameModeSettings)
+      .put(`${process.env.REACT_APP_API_URL}api/updateSettings/${gameModeSettings._id}`, gameModeSettings)
       .then((response) => {
         console.log(response.data);
       });
     setEnableSave(false);
-    console.log(gameModeSettings);
+    window.location.reload();
      
   };
 

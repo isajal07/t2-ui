@@ -18,8 +18,8 @@ const App = () => {
         <Route path="/game" element={<Game />} /> 
         <Route path="/settings" element={<Settings />} />
         <Route path="/studyData" element={<StudyData />} />
-        <Route path="/studyData/:studyDataId" element={<Study/>}/>
-        <Route path="/studyData/:studyDataId/userGameData/:userGameDataId" element={<UserData/>}/>
+        <Route path="/studyData/:studyDataName/:studyDataId" element={<Study/>}/>
+        <Route path="/studyData/:studyDataName/:studyDataId/userGameData/:userGameDataId" element={<UserData/>}/>
       </Route>
     </Routes>
   );

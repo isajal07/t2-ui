@@ -67,6 +67,7 @@ const style = {
 };
 
 const Settings = () => {
+  const admin = localStorage.getItem("token");
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [listOfSettings, setListOfSettings] = React.useState<GameModeSettings[]>([]);
@@ -74,10 +75,13 @@ const Settings = () => {
   const [enableCreateSettingsButton, setEnableCreateSettingsButton] = React.useState(false);
   const [createMode, setCreateMode] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState(false);
+  const [createSettingsForm, setCreateSettingsForm] = React.useState({
+    name: "",
+    note: ""
+  })
   const handleClose = () => setOpen(false);
   const handleOpenCreateSettings = () => {
     setOpen(true);
-    setSettings(defaultSettings);
   }
   const handleSidlerChange = (
     event: React.SyntheticEvent,
@@ -87,7 +91,7 @@ const Settings = () => {
   };
 
   React.useEffect(() => {
-      axios.get("http://localhost:5001/api/getSettings").then((response) => {
+      axios.get(`${process.env.REACT_APP_API_URL}api/getSettings`).then((response) => {
         setListOfSettings(response.data)
         setSettings(response.data.find((param:any) => param.isSelected === true))
       });
@@ -96,12 +100,13 @@ const Settings = () => {
   const onCreateSettingsButton = () => {
     setOpen(false);
     setCreateMode(true);
+    setSettings({...defaultSettings, name: createSettingsForm.name, note: createSettingsForm.note, createdBy: admin})
   };
 
   const onCreateSettings = async () => {
     setOpenConfirm(false)
     await axios
-      .post("http://localhost:5001/api/createSettings", settings)
+      .post(`${process.env.REACT_APP_API_URL}api/createSettings`, settings)
       .then((response) => {
         setSettings(response.data);
       });
@@ -111,6 +116,7 @@ const Settings = () => {
   const onSettingsSelect = (event:any) => {
     setSettings(event.target.value);
   };
+  console.log(settings)
   return (
     <div className="Settings">
       <ResponsiveAppBar />
@@ -132,14 +138,15 @@ const Settings = () => {
                 variant="outlined"
                 color="primary"
                 size="small"
-                value={settings.name}
+                // value={settings.name}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   if (event.target.value) {
                     setEnableCreateSettingsButton(true);
                   } else {
                     setEnableCreateSettingsButton(false);
                   }
-                  setSettings({ ...settings, name: event.target.value });
+                  // setSettings({ ...settings, name: event.target.value });
+                  setCreateSettingsForm({...createSettingsForm, name: event.target.value})
                 }}
               />
             </Box>
@@ -152,9 +159,10 @@ const Settings = () => {
                 rows={3}
                 variant="outlined"
                 label="Enter note..."
-                value={settings.note}
+                // value={settings.note}
                 onChange={(event) => {
-                  setSettings({ ...settings, note: event.target.value });
+                  // setSettings({ ...settings, note: event.target.value });
+                  setCreateSettingsForm({...createSettingsForm, note: event.target.value})
                 }}
               />
             </Box>
@@ -209,7 +217,10 @@ const Settings = () => {
       </Grid>
 
       <Box mt={2}><Typography fontSize={30}>{settings?.name}</Typography></Box>
-      {settings?.note && <Box><Typography fontStyle={"italic"}>Note: {settings?.note}</Typography></Box>}
+      <Grid container>
+      {settings?.note && <Grid item xs={6}><Typography fontStyle={"italic"} fontSize={13}>Note: {settings?.note}</Typography></Grid>}
+      <Grid item xs={6} textAlign={"right"}><Typography fontSize={13}>Created by: {settings?.createdBy}</Typography></Grid>
+        </Grid>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs

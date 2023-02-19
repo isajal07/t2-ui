@@ -20,7 +20,7 @@ export default function Auth() {
   const navigate = useNavigate();
   const onSignIn = async () => {
     if(!password) return setErrorMsg("Enter password!")
-    await axios.post("http://localhost:5001/api/signinAdmin", {password: password})
+    await axios.post(`${process.env.REACT_APP_API_URL}api/signinAdmin`, {password: password})
       .then((response) => {
         if(response.data != null){
           navigate('/game');

@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 
 import { useParams } from "react-router-dom";
-import { Container, Box, Button, Typography, Grid, Modal } from "@mui/material";
+import { Container, Box, Button, Typography, Grid, Modal, IconButton } from "@mui/material";
 import { alpha, styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 
 import ResponsiveAppBar from "../../../../Components/AppBar/AppBar";
 import UserData from "../../UserData/UserData";
+import DownloadIcon from '@mui/icons-material/Download';
+import { CSVLink, CSVDownload } from "react-csv";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -38,35 +40,38 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   }));
 
 const Study = () => {
-  const { studyDataId } = useParams();
+  const { studyDataId, studyDataName } = useParams();
   const [studyData, setStudyData] = React.useState([]);
   const [selectedUserData, setSelectedUserData] = React.useState({});
   const navigate = useNavigate();
   React.useEffect(() => {
     axios
-      .get(`http://localhost:5001/api/getUserGameData/studyId/${studyDataId}`)
+      .get(`${process.env.REACT_APP_API_URL}api/getUserGameData/studyId/${studyDataId}`)
       .then((response) => {
         setStudyData(response.data);
       });
   }, []);
   const onRowClick = (userGameData:any) => {
     setSelectedUserData(userGameData)
-    navigate(`./userGameData/${userGameData._id}`);
+    navigate(`./userGameData/${userGameData.name}/${userGameData._id}`);
   };
-  console.log(selectedUserData);
+  const downloadCSV = () => {
+    console.log('download!')
+  };
   return (
     <Box>
       <ResponsiveAppBar />
       {studyData ? (
           <Container>
-            <Typography> Table of users game data of @studyName:</Typography>
            <Box mt={2}>
+            <Box mb={2}><Typography fontSize={30}> {studyDataName}:</Typography></Box>
            <TableContainer component={Paper}>
              <Table sx={{ minWidth: 700 }} aria-label="customized table">
                <TableHead>
                  <TableRow>
                    <StyledTableCell>Alias name</StyledTableCell>
                    <StyledTableCell align="center">Created At</StyledTableCell>
+                   <StyledTableCell align="center">Download CSV</StyledTableCell>
                  </TableRow>
                </TableHead>
                <TableBody>
@@ -76,6 +81,7 @@ const Study = () => {
                        {study.aliasName}
                      </StyledTableCell>
                      <StyledTableCell align="center">{DateTime.fromISO(study.createdAt).toLocaleString(DateTime.DATETIME_MED)}</StyledTableCell>
+                     <StyledTableCell align="center"><IconButton aria-label="download" onClick={downloadCSV}><DownloadIcon/></IconButton></StyledTableCell>
                    </StyledTableRow>
                  ))}
                </TableBody>
