@@ -76,9 +76,9 @@ const Study = () => {
                </TableHead>
                <TableBody>
                  {studyData.map((study:any) => (
-                   <StyledTableRow key={study.aliasName} hover={true} onClick={() => onRowClick(study)}>
+                   <StyledTableRow key={study.name} hover={true} onClick={() => onRowClick(study)}>
                      <StyledTableCell component="th" scope="row">
-                       {study.aliasName}
+                       {study.name}
                      </StyledTableCell>
                      <StyledTableCell align="center">{DateTime.fromISO(study.createdAt).toLocaleString(DateTime.DATETIME_MED)}</StyledTableCell>
                      <StyledTableCell align="center"><IconButton aria-label="download" onClick={downloadCSV}><DownloadIcon/></IconButton></StyledTableCell>
