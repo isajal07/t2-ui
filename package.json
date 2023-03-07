@@ -2,7 +2,7 @@
   "name": "t2-ui",
   "version": "0.1.0",
   "private": false,
-  "homepage": "https://isajal07.github.io/t2-ui",
+  "homepage": "https://isajal07.github.io/t2-ui/",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
