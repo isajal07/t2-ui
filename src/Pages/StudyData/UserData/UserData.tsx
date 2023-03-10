@@ -182,6 +182,7 @@ const UserData = () => {
                   <Table sx={{ minWidth: 700 }} aria-label="customized table">
                     <TableHead>
                       <TableRow>
+                      <StyledTableCell>SN</StyledTableCell>
                         <StyledTableCell>Time</StyledTableCell>
                         <StyledTableCell align="center">Event</StyledTableCell>
                         <StyledTableCell align="center">Rule</StyledTableCell>
@@ -197,8 +198,11 @@ const UserData = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {userGameData?.records?.map((event: any) => (
+                      {userGameData?.records?.map((event: any, index: any) => (
                         <StyledTableRow key={event.time} hover={true}>
+                          <StyledTableCell component="th" scope="row">
+                            {index}.
+                          </StyledTableCell>
                           <StyledTableCell component="th" scope="row">
                             {event.time}
                           </StyledTableCell>
