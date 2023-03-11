@@ -125,8 +125,7 @@ const UserData = () => {
       .then((response) => {
         setUserGameData(formatUserGameData(response.data));
       });
-    }, []);
-    console.log(userGameData)
+    }, [userGameDataId]);
     
   const getBuildingName = (buldingEnum: Number) => {
     if (buldingEnum === 1) {
