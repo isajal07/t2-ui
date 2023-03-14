@@ -203,7 +203,7 @@ const UserData = () => {
                             {index}.
                           </StyledTableCell>
                           <StyledTableCell component="th" scope="row">
-                            {event.time}
+                            {Math.round(event.time * 1000) / 1000}
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             {event.eventName}
