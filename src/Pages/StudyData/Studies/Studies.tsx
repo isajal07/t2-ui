@@ -47,6 +47,7 @@ const Studies = (props: { studies: any; }) => {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
+          <StyledTableCell>SN. </StyledTableCell>
             <StyledTableCell>Study name</StyledTableCell>
             <StyledTableCell align="center">Created By</StyledTableCell>
             <StyledTableCell align="center">Created At</StyledTableCell>
@@ -54,8 +55,9 @@ const Studies = (props: { studies: any; }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {studies.map((study:any) => (
+          {studies.map((study:any, index: any) => (
             <StyledTableRow key={study.name} hover={true} onClick={() => onRowClick(study)}>
+              <StyledTableCell>{index + 1}. </StyledTableCell>
               <StyledTableCell component="th" scope="row">
                 {study.name}
               </StyledTableCell>
