@@ -15,10 +15,17 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Alert from "@mui/material/Alert";
 import "./Session.css";
 import { GameModeSettings } from "../../../interface/interface";
 import CircularProgress from "@mui/material/CircularProgress";
+import Accordion from '@mui/material/Accordion';
+import MuiAccordionSummary, {
+  AccordionSummaryProps,
+} from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import { styled } from '@mui/material/styles';
 
 interface Props {
   gameModeSettings: GameModeSettings;
@@ -28,9 +35,29 @@ interface Props {
   openConfirm: boolean;
   setOpenConfirm: (value: boolean) => void;
 }
+const AccordionSummary = styled((props: AccordionSummaryProps) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255, 255, 255, .05)'
+      : 'rgba(0, 0, 0, .03)',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
+
 
 const Session = (props: Props) => {
-  const { gameModeSettings, setSettings, createMode,  onCreateSettings, openConfirm, setOpenConfirm } = props;
+  
+  const { gameModeSettings, setSettings, createMode, onCreateSettings, openConfirm, setOpenConfirm } = props;
   const numberOfWave = Array.from({ length: 20 }, (v, k) => k + 1);
   const [enableSave, setEnableSave] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -41,7 +68,7 @@ const Session = (props: Props) => {
       Array(event.target.value),
       (_, index) => {
         return {
-          ...gameModeSettings.session.accuracies[0],
+          ...gameModeSettings.session.waveParameters[0],
           wave: index + 1,
         };
       }
@@ -52,7 +79,7 @@ const Session = (props: Props) => {
       session: {
         ...gameModeSettings.session,
         maxWaves: event.target.value,
-        accuracies: updatedAccuracies,
+        waveParameters: updatedAccuracies,
       },
     });
   };
@@ -65,26 +92,156 @@ const Session = (props: Props) => {
     humanOrAI: string
   ) => {
     setEnableSave(true);
-    if (humanOrAI === "AICorrectProbability") {
-      const copy = [...gameModeSettings.session.accuracies];
-      copy[index].AICorrectProbability = newValue;
-      setSettings({
-        ...gameModeSettings,
-        session: {
-          ...gameModeSettings.session,
-          accuracies: copy,
-        },
-      });
-    } else {
-      const copy = [...gameModeSettings.session.accuracies];
-      copy[index].humanCorrectProbability = newValue;
-      setSettings({
-        ...gameModeSettings,
-        session: {
-          ...gameModeSettings.session,
-          accuracies: copy,
-        },
-      });
+    switch (humanOrAI) {
+      case "AICorrectProbability": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].AICorrectProbability = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "humanCorrectProbability": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].humanCorrectProbability = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "penalty": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].penalty = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "maliciousPacketProbability": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].maliciousPacketProbability = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "intervalBetweenPackets": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].intervalBetweenPackets = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "maxNumberOfPackets": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].maxNumberOfPackets = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "minIntervalBetweenRuleChanges": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].minIntervalBetweenRuleChanges = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "maxIntervalBetweenRuleChanges": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].maxIntervalBetweenRuleChanges = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "minHumanAdviceTimeInSeconds": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].minHumanAdviceTimeInSeconds = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "maxHumanAdviceTimeInSeconds": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].maxHumanAdviceTimeInSeconds = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "minAIAdviceTimeInSeconds": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].minAIAdviceTimeInSeconds = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "maxAIAdviceTimeInSeconds": {
+        const copy = [...gameModeSettings.session.waveParameters];
+        copy[index].maxAIAdviceTimeInSeconds = newValue;
+        setSettings({
+          ...gameModeSettings,
+          session: {
+            ...gameModeSettings.session,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+
+      default: {
+        setSettings({...gameModeSettings});
+        break;
+      }
     }
   };
 
@@ -103,17 +260,19 @@ const Session = (props: Props) => {
       });
     setEnableSave(false);
     window.location.reload();
-  }
+     
+  };
 
+  React.useEffect(() => {
+    if(createMode) setEnableSave(true);
+  }, [createMode]);
   const onSaveClicked = () => {
     setOpenConfirm(true);
   };
   return (
-    <Box>
+    <Box>    
       <Box>
-        <Divider sx={{ marginBottom: 2 }}>
-          <Chip label="WAVE & ACCURACY" />
-        </Divider>
+ 
         <FormControl size="small">
           <Grid container>
             <Grid item xs={6}>
@@ -135,14 +294,25 @@ const Session = (props: Props) => {
       </Box>
 
       <Box padding={2}>
-        {gameModeSettings.session.accuracies.map((_, i) => {
+        {gameModeSettings.session.waveParameters.map((_, i) => {
           return (
+            <Box>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Wave {i + 1}</Typography>
+        </AccordionSummary>
+
+        <AccordionDetails>
+          <Typography>
+          <Divider sx={{ marginBottom: 2 }}>
+          <Chip label="ACCURACY" />
+        </Divider>
+        
             <Grid container>
-              <Grid item xs={1}>
-                <Typography fontSize={13} pt={3}>
-                  {i + 1}.
-                </Typography>
-              </Grid>
               <Grid item xs={5}>
                 <InputSlider
                   silderName="AI Correct Probability"
@@ -164,7 +334,7 @@ const Session = (props: Props) => {
                     )
                   }
                   value={
-                    gameModeSettings.session.accuracies[i]
+                    gameModeSettings.session.waveParameters[i]
                       .AICorrectProbability
                   }
                 />
@@ -190,40 +360,41 @@ const Session = (props: Props) => {
                     )
                   }
                   value={
-                    gameModeSettings.session.accuracies[i]
+                    gameModeSettings.session.waveParameters[i]
                       .humanCorrectProbability
                   }
                 />
               </Grid>
-            </Grid>
-          );
-        })}
-      </Box>
-
-      <Box>
+              </Grid>
         <Divider sx={{ marginBottom: 2, marginTop: 2 }}>
           <Chip label="SPEED & DIFFICULTY" />
         </Divider>
-        <Grid container spacing={33}>
-          <Grid item xs={3}>
+        <Grid container spacing={35}>
+              <Grid item xs={3}>
             <InputSlider
               silderName="Penalty"
               min={1}
               max={10}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      penalty: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.penalty}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "penalty"
+                )
+              }
+              value={gameModeSettings.session.waveParameters[i].penalty}
             />
+
+
+
           </Grid>
           <Grid item xs={3}>
             <InputSlider
@@ -232,17 +403,20 @@ const Session = (props: Props) => {
               max={1.00}
               step={0.01}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      maliciousPacketProbability: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.maliciousPacketProbability}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "maliciousPacketProbability"
+                )
+              }
+              value={gameModeSettings.session.waveParameters[i].maliciousPacketProbability}
             />
           </Grid>
           <Grid item xs={3}>
@@ -252,39 +426,46 @@ const Session = (props: Props) => {
               max={2.00}
               step={0.01}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      intervalBetweenPackets: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.intervalBetweenPackets}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "intervalBetweenPackets"
+                )
+              }
+              value={gameModeSettings.session.waveParameters[i].intervalBetweenPackets}
             />
-          </Grid>
-        </Grid>
-        <Grid container spacing={33}>
+          </Grid>  
+          </Grid>    
+
+           <Grid container spacing={35}>
           <Grid item xs={3}>
             <InputSlider
               silderName="Max Number of Packets"
-              min={0.00}
-              max={200.00}
-              step={20}
+              min={0}
+              max={500}
+              step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      maxNumberOfPackets: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.maxNumberOfPackets}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "maxNumberOfPackets"
+                )
+              }
+              value={gameModeSettings.session.waveParameters[i].maxNumberOfPackets}
             />
           </Grid>
           <Grid item xs={3}>
@@ -294,17 +475,20 @@ const Session = (props: Props) => {
               max={200.00}
               step={20}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      minIntervalBetweenRuleChanges: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.minIntervalBetweenRuleChanges}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "minIntervalBetweenRuleChanges"
+                )
+              }
+              value={gameModeSettings.session.waveParameters[i].minIntervalBetweenRuleChanges}
             />
           </Grid>
           <Grid item xs={3}>
@@ -314,24 +498,24 @@ const Session = (props: Props) => {
               max={400.00}
               step={20}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      maxIntervalBetweenRuleChanges: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.maxIntervalBetweenRuleChanges}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "maxIntervalBetweenRuleChanges"
+                )
+              }
+              value={gameModeSettings.session.waveParameters[i].maxIntervalBetweenRuleChanges}
             />
           </Grid>
-        </Grid>
-      </Box>
-
-      <Box>
-        <Divider sx={{ marginBottom: 2, marginTop: 2 }}>
+          </Grid>
+          <Divider sx={{ marginBottom: 2, marginTop: 2 }}>
           <Chip label="ADVICE" />
         </Divider>
         <Grid container spacing={33}>
@@ -342,17 +526,20 @@ const Session = (props: Props) => {
               max={60.00}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      minHumanAdviceTimeInSeconds: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.minHumanAdviceTimeInSeconds}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "minHumanAdviceTimeInSeconds"
+                )
+              }
+              value={gameModeSettings.session.waveParameters[i].minHumanAdviceTimeInSeconds}
             />
           </Grid>
           <Grid item xs={3}>
@@ -362,19 +549,24 @@ const Session = (props: Props) => {
               max={60.00}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      maxHumanAdviceTimeInSeconds: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.maxHumanAdviceTimeInSeconds}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "maxHumanAdviceTimeInSeconds"
+                )
+              }
+              value={gameModeSettings.session.waveParameters[i].maxHumanAdviceTimeInSeconds}
             />
           </Grid>
+          </Grid>
+          <Grid container spacing={33}>
           <Grid item xs={3}>
             <InputSlider
               silderName="Minimum AI Advice Time (sec.)"
@@ -382,21 +574,22 @@ const Session = (props: Props) => {
               max={20.00}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      minAIAdviceTimeInSeconds: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.minAIAdviceTimeInSeconds}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "minAIAdviceTimeInSeconds"
+                )
+              }
+              value={gameModeSettings.session.waveParameters[i].minAIAdviceTimeInSeconds}
             />
           </Grid>
-        </Grid>
-        <Grid container spacing={33}>
           <Grid item xs={3}>
             <InputSlider
               silderName="Maximum AI Advice Time (sec.)"
@@ -404,20 +597,30 @@ const Session = (props: Props) => {
               max={20.00}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      maxAIAdviceTimeInSeconds: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.maxAIAdviceTimeInSeconds}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "maxAIAdviceTimeInSeconds"
+                )
+              }
+              value={gameModeSettings.session.waveParameters[i].maxAIAdviceTimeInSeconds}
             />
-          </Grid>
-        </Grid>
+            </Grid>
+          </Grid> 
+            </Typography>
+        </AccordionDetails>
+      </Accordion>
+      </Box>
+          );
+        })}
+        
       </Box>
 
       <Box>
@@ -432,15 +635,15 @@ const Session = (props: Props) => {
               max={99999}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
+              onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
                 setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      AIRandomSeed: newValue
-                    },
-                  });
+                  ...gameModeSettings,
+                  session: {
+                    ...gameModeSettings.session,
+                    AIRandomSeed: newValue,
+                  },
+                });
               }}
               value={gameModeSettings.session.AIRandomSeed}
             />
@@ -452,50 +655,21 @@ const Session = (props: Props) => {
               max={99999}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
+              onChange={(event: Event, newValue: number) => {
                 setEnableSave(true);
                 setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      humanRandomSeed: newValue
-                    },
-                  });
+                  ...gameModeSettings,
+                  session: {
+                    ...gameModeSettings.session,
+                    humanRandomSeed: newValue,
+                  },
+                });
               }}
               value={gameModeSettings.session.humanRandomSeed}
             />
           </Grid>
         </Grid>
       </Box>
-
-      <Box>
-        <Divider sx={{ marginBottom: 2, marginTop: 2 }}>
-          <Chip label="TRAINING/SESSION" />
-        </Divider>
-        <Grid container spacing={33}>
-          <Grid item xs={3}>
-            <InputSlider
-              silderName="Difficulty Ratio"
-              min={0.00}
-              max={1.00}
-              step={0.1}
-              textFontSize={12}
-              onChange={(event: Event, newValue: number,) => {
-                setEnableSave(true);
-                setSettings({
-                    ...gameModeSettings,
-                    session: {
-                      ...gameModeSettings.session,
-                      difficultyRatio: newValue
-                    },
-                  });
-              }}
-              value={gameModeSettings.session.difficultyRatio}
-            />
-          </Grid>
-        </Grid>
-      </Box>
-      <Divider />
       <Box mt={2} mb={15} sx={{ textAlign: "center" }}>
         <Button
           variant="contained"
@@ -523,19 +697,19 @@ const Session = (props: Props) => {
             </Box>
           ) : (
             <>
-          <DialogTitle id="alert-dialog-title">{"Confirm"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-            {createMode? <>Create settings?</> : <>Save <b>session</b> settings changes?</>}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>No</Button>
-            <Button onClick={createMode ? onCreateSettings:handleConfirm} autoFocus>
-              Confirm
-            </Button>
-          </DialogActions>
-          </>
+              <DialogTitle id="alert-dialog-title">{"Confrim"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  {createMode? <>Create settings?</> : <>Save <b>session</b> settings changes?</>}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>No</Button>
+                <Button onClick={createMode? onCreateSettings: handleConfirm} autoFocus>
+                  Confirm
+                </Button>
+              </DialogActions>
+            </>
           )}
         </Dialog>
       </div>

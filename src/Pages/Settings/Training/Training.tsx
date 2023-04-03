@@ -18,6 +18,14 @@ import DialogTitle from "@mui/material/DialogTitle";
 import "./Training.css";
 import { GameModeSettings } from "../../../interface/interface";
 import CircularProgress from "@mui/material/CircularProgress";
+import Accordion from '@mui/material/Accordion';
+import MuiAccordionSummary, {
+  AccordionSummaryProps,
+} from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import { styled } from '@mui/material/styles';
 
 interface Props {
   gameModeSettings: GameModeSettings;
@@ -27,8 +35,28 @@ interface Props {
   openConfirm: boolean;
   setOpenConfirm: (value: boolean) => void;
 }
+const AccordionSummary = styled((props: AccordionSummaryProps) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255, 255, 255, .05)'
+      : 'rgba(0, 0, 0, .03)',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
+
 
 const Training = (props: Props) => {
+  
   const { gameModeSettings, setSettings, createMode, onCreateSettings, openConfirm, setOpenConfirm } = props;
   const numberOfWave = Array.from({ length: 20 }, (v, k) => k + 1);
   const [enableSave, setEnableSave] = React.useState(false);
@@ -40,7 +68,7 @@ const Training = (props: Props) => {
       Array(event.target.value),
       (_, index) => {
         return {
-          ...gameModeSettings.training.accuracies[0],
+          ...gameModeSettings.training.waveParameters[0],
           wave: index + 1,
         };
       }
@@ -51,7 +79,7 @@ const Training = (props: Props) => {
       training: {
         ...gameModeSettings.training,
         maxWaves: event.target.value,
-        accuracies: updatedAccuracies,
+        waveParameters: updatedAccuracies,
       },
     });
   };
@@ -64,26 +92,156 @@ const Training = (props: Props) => {
     humanOrAI: string
   ) => {
     setEnableSave(true);
-    if (humanOrAI === "AICorrectProbability") {
-      const copy = [...gameModeSettings.training.accuracies];
-      copy[index].AICorrectProbability = newValue;
-      setSettings({
-        ...gameModeSettings,
-        training: {
-          ...gameModeSettings.training,
-          accuracies: copy,
-        },
-      });
-    } else {
-      const copy = [...gameModeSettings.training.accuracies];
-      copy[index].humanCorrectProbability = newValue;
-      setSettings({
-        ...gameModeSettings,
-        training: {
-          ...gameModeSettings.training,
-          accuracies: copy,
-        },
-      });
+    switch (humanOrAI) {
+      case "AICorrectProbability": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].AICorrectProbability = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "humanCorrectProbability": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].humanCorrectProbability = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "penalty": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].penalty = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "maliciousPacketProbability": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].maliciousPacketProbability = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "intervalBetweenPackets": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].intervalBetweenPackets = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "maxNumberOfPackets": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].maxNumberOfPackets = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "minIntervalBetweenRuleChanges": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].minIntervalBetweenRuleChanges = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "maxIntervalBetweenRuleChanges": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].maxIntervalBetweenRuleChanges = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "minHumanAdviceTimeInSeconds": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].minHumanAdviceTimeInSeconds = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "maxHumanAdviceTimeInSeconds": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].maxHumanAdviceTimeInSeconds = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "minAIAdviceTimeInSeconds": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].minAIAdviceTimeInSeconds = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+      case "maxAIAdviceTimeInSeconds": {
+        const copy = [...gameModeSettings.training.waveParameters];
+        copy[index].maxAIAdviceTimeInSeconds = newValue;
+        setSettings({
+          ...gameModeSettings,
+          training: {
+            ...gameModeSettings.training,
+            waveParameters: copy,
+          },
+        });
+        break;
+      }
+
+      default: {
+        setSettings({...gameModeSettings});
+        break;
+      }
     }
   };
 
@@ -112,11 +270,9 @@ const Training = (props: Props) => {
     setOpenConfirm(true);
   };
   return (
-    <Box>
+    <Box>    
       <Box>
-        <Divider sx={{ marginBottom: 2 }}>
-          <Chip label="WAVE & ACCURACY" />
-        </Divider>
+ 
         <FormControl size="small">
           <Grid container>
             <Grid item xs={6}>
@@ -138,14 +294,25 @@ const Training = (props: Props) => {
       </Box>
 
       <Box padding={2}>
-        {gameModeSettings.training.accuracies.map((_, i) => {
+        {gameModeSettings.training.waveParameters.map((_, i) => {
           return (
+            <Box>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Wave {i + 1}</Typography>
+        </AccordionSummary>
+
+        <AccordionDetails>
+          <Typography>
+          <Divider sx={{ marginBottom: 2 }}>
+          <Chip label="ACCURACY" />
+        </Divider>
+        
             <Grid container>
-              <Grid item xs={1}>
-                <Typography fontSize={13} pt={3}>
-                  {i + 1}.
-                </Typography>
-              </Grid>
               <Grid item xs={5}>
                 <InputSlider
                   silderName="AI Correct Probability"
@@ -167,7 +334,7 @@ const Training = (props: Props) => {
                     )
                   }
                   value={
-                    gameModeSettings.training.accuracies[i]
+                    gameModeSettings.training.waveParameters[i]
                       .AICorrectProbability
                   }
                 />
@@ -193,40 +360,41 @@ const Training = (props: Props) => {
                     )
                   }
                   value={
-                    gameModeSettings.training.accuracies[i]
+                    gameModeSettings.training.waveParameters[i]
                       .humanCorrectProbability
                   }
                 />
               </Grid>
-            </Grid>
-          );
-        })}
-      </Box>
-
-      <Box>
+              </Grid>
         <Divider sx={{ marginBottom: 2, marginTop: 2 }}>
           <Chip label="SPEED & DIFFICULTY" />
         </Divider>
-        <Grid container spacing={33}>
-          <Grid item xs={3}>
+        <Grid container spacing={35}>
+              <Grid item xs={3}>
             <InputSlider
               silderName="Penalty"
               min={1}
               max={10}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    penalty: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.penalty}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "penalty"
+                )
+              }
+              value={gameModeSettings.training.waveParameters[i].penalty}
             />
+
+
+
           </Grid>
           <Grid item xs={3}>
             <InputSlider
@@ -235,17 +403,20 @@ const Training = (props: Props) => {
               max={1.00}
               step={0.01}
               textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    maliciousPacketProbability: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.maliciousPacketProbability}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "maliciousPacketProbability"
+                )
+              }
+              value={gameModeSettings.training.waveParameters[i].maliciousPacketProbability}
             />
           </Grid>
           <Grid item xs={3}>
@@ -255,21 +426,25 @@ const Training = (props: Props) => {
               max={2.00}
               step={0.01}
               textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    intervalBetweenPackets: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.intervalBetweenPackets}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "intervalBetweenPackets"
+                )
+              }
+              value={gameModeSettings.training.waveParameters[i].intervalBetweenPackets}
             />
-          </Grid>
-        </Grid>
-        <Grid container spacing={33}>
+          </Grid>  
+          </Grid>    
+
+           <Grid container spacing={35}>
           <Grid item xs={3}>
             <InputSlider
               silderName="Max Number of Packets"
@@ -277,17 +452,20 @@ const Training = (props: Props) => {
               max={500}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    maxNumberOfPackets: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.maxNumberOfPackets}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "maxNumberOfPackets"
+                )
+              }
+              value={gameModeSettings.training.waveParameters[i].maxNumberOfPackets}
             />
           </Grid>
           <Grid item xs={3}>
@@ -297,17 +475,20 @@ const Training = (props: Props) => {
               max={200.00}
               step={20}
               textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    minIntervalBetweenRuleChanges: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.minIntervalBetweenRuleChanges}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "minIntervalBetweenRuleChanges"
+                )
+              }
+              value={gameModeSettings.training.waveParameters[i].minIntervalBetweenRuleChanges}
             />
           </Grid>
           <Grid item xs={3}>
@@ -317,24 +498,24 @@ const Training = (props: Props) => {
               max={400.00}
               step={20}
               textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    maxIntervalBetweenRuleChanges: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.maxIntervalBetweenRuleChanges}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "maxIntervalBetweenRuleChanges"
+                )
+              }
+              value={gameModeSettings.training.waveParameters[i].maxIntervalBetweenRuleChanges}
             />
           </Grid>
-        </Grid>
-      </Box>
-
-      <Box>
-        <Divider sx={{ marginBottom: 2, marginTop: 2 }}>
+          </Grid>
+          <Divider sx={{ marginBottom: 2, marginTop: 2 }}>
           <Chip label="ADVICE" />
         </Divider>
         <Grid container spacing={33}>
@@ -345,17 +526,20 @@ const Training = (props: Props) => {
               max={60.00}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    minHumanAdviceTimeInSeconds: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.minHumanAdviceTimeInSeconds}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "minHumanAdviceTimeInSeconds"
+                )
+              }
+              value={gameModeSettings.training.waveParameters[i].minHumanAdviceTimeInSeconds}
             />
           </Grid>
           <Grid item xs={3}>
@@ -365,19 +549,24 @@ const Training = (props: Props) => {
               max={60.00}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    maxHumanAdviceTimeInSeconds: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.maxHumanAdviceTimeInSeconds}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "maxHumanAdviceTimeInSeconds"
+                )
+              }
+              value={gameModeSettings.training.waveParameters[i].maxHumanAdviceTimeInSeconds}
             />
           </Grid>
+          </Grid>
+          <Grid container spacing={33}>
           <Grid item xs={3}>
             <InputSlider
               silderName="Minimum AI Advice Time (sec.)"
@@ -385,21 +574,22 @@ const Training = (props: Props) => {
               max={20.00}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    minAIAdviceTimeInSeconds: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.minAIAdviceTimeInSeconds}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "minAIAdviceTimeInSeconds"
+                )
+              }
+              value={gameModeSettings.training.waveParameters[i].minAIAdviceTimeInSeconds}
             />
           </Grid>
-        </Grid>
-        <Grid container spacing={33}>
           <Grid item xs={3}>
             <InputSlider
               silderName="Maximum AI Advice Time (sec.)"
@@ -407,20 +597,30 @@ const Training = (props: Props) => {
               max={20.00}
               step={1}
               textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    maxAIAdviceTimeInSeconds: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.maxAIAdviceTimeInSeconds}
+              onChange={(
+                event: Event,
+                newValue: number,
+                activeThumb: number
+              ) =>
+                onCorrectProbablityChange(
+                  event,
+                  newValue,
+                  activeThumb,
+                  i,
+                  "maxAIAdviceTimeInSeconds"
+                )
+              }
+              value={gameModeSettings.training.waveParameters[i].maxAIAdviceTimeInSeconds}
             />
-          </Grid>
-        </Grid>
+            </Grid>
+          </Grid> 
+            </Typography>
+        </AccordionDetails>
+      </Accordion>
+      </Box>
+          );
+        })}
+        
       </Box>
 
       <Box>
@@ -470,35 +670,6 @@ const Training = (props: Props) => {
           </Grid>
         </Grid>
       </Box>
-
-      <Box>
-        <Divider sx={{ marginBottom: 2, marginTop: 2 }}>
-          <Chip label="TRAINING/SESSION" />
-        </Divider>
-        <Grid container spacing={33}>
-          <Grid item xs={3}>
-            <InputSlider
-              silderName="Difficulty Ratio"
-              min={0.00}
-              max={1.00}
-              step={0.1}
-              textFontSize={12}
-              onChange={(event: Event, newValue: number) => {
-                setEnableSave(true);
-                setSettings({
-                  ...gameModeSettings,
-                  training: {
-                    ...gameModeSettings.training,
-                    difficultyRatio: newValue,
-                  },
-                });
-              }}
-              value={gameModeSettings.training.difficultyRatio}
-            />
-          </Grid>
-        </Grid>
-      </Box>
-      <Divider />
       <Box mt={2} mb={15} sx={{ textAlign: "center" }}>
         <Button
           variant="contained"
