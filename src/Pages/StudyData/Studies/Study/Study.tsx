@@ -72,7 +72,7 @@ const Study = () => {
                   <StyledTableCell>SN. </StyledTableCell>
                    <StyledTableCell>Alias name</StyledTableCell>
                    <StyledTableCell align="center">Created At</StyledTableCell>
-                   <StyledTableCell align="center">Download CSV</StyledTableCell>
+                   {/* <StyledTableCell align="center">Download CSV</StyledTableCell> */}
                  </TableRow>
                </TableHead>
                <TableBody>
@@ -85,7 +85,7 @@ const Study = () => {
                        {study.name}
                      </StyledTableCell>
                      <StyledTableCell align="center">{DateTime.fromISO(study.createdAt).toLocaleString(DateTime.DATETIME_MED)}</StyledTableCell>
-                     <StyledTableCell align="center"><IconButton aria-label="download" onClick={downloadCSV}><DownloadIcon/></IconButton></StyledTableCell>
+                     {/* <StyledTableCell align="center"><IconButton aria-label="download" onClick={downloadCSV}><DownloadIcon/></IconButton></StyledTableCell> */}
                    </StyledTableRow>
                  ))}
                </TableBody>

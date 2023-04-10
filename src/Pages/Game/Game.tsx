@@ -31,37 +31,27 @@ const Game = () => {
   const [study, setStudy] = React.useState<any>({});
   const [listOfstudy, setListOfStudy] = React.useState<any>([]);
   const [isLoading, setIsLoading] = React.useState<Boolean>(true);
-
+  const [numberOfSettings, setNumberOfSettings] = React.useState<number>(1);
+  // const [updatedSettingNumber, setUpdatedSettingNumber] = React.useState<number | null>(null);
   React.useEffect(() => {
-      axios.get(`${process.env.REACT_APP_API_URL}api/getSettings`).then((response) => {
-        setListOfSettings(response.data);
-        setSettings(
-          response.data.find((param: any) => param.isSelected === true)
-          );
-        });
-        
-        axios.get(`${process.env.REACT_APP_API_URL}api/getStudies`).then((response) => {
-          setListOfStudy(response.data);
-          setStudy(response.data.find((param: any) => param.isSelected === true));
-        });
-        
+    axios.get(`${process.env.REACT_APP_API_URL}api/getStudies`).then((response) => {
+      setListOfStudy(response.data);
+      setStudy(response.data.find((param: any) => param.isSelected === true));
+    });
+    setNumberOfSettings(study?.numberOfSettings);
+    axios.get(`${process.env.REACT_APP_API_URL}api/getSettings`).then((response) => {
+      setListOfSettings(response.data);
+      });
         setIsLoading(false);
-  }, []);
-
-  const onSettingsSelect = async (event: any) => {
-    setSettings(event.target.value);
-    await axios
-      .put(
-        `${process.env.REACT_APP_API_URL}api/selectSettings/${event.target.value._id}`
-      )
-      .then((response) => {});
-  };
+      }, [study?.numberOfSettings]);
 
   const onStudySelect = async (event: any) => {
     setStudy(event.target.value);
     await axios
       .put(`${process.env.REACT_APP_API_URL}api/selectStudy/${event.target.value._id}`)
-      .then((response) => {});
+      .then((response) => {
+        setNumberOfSettings(response.data.numberOfSettings);
+      });
   };
   return (
     <div className="Game">
@@ -88,32 +78,7 @@ const Game = () => {
                 </Typography>
                 </Box>
           <Grid container>
-            <Grid item xs={6}>
-              <FormControl size="small">
-                <Grid container>
-                  <Grid item xs={5}>
-                    <Typography mt={1}>Select Settings:</Typography>
-                  </Grid>
-                  <Grid item xs={7}>
-                    <Select
-                      value={settings}
-                      onChange={onSettingsSelect}
-                      sx={{ width: 200 }}
-                    >
-                      {listOfSettings?.map((param) => (
-                        //@ts-ignore
-                        <MenuItem key={param._id} value={param}>
-                          {/* @ts-ignore */}
-                          {param.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Grid>
-                </Grid>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={6}>
+            <Grid item xs={6} mt={1}>
               <FormControl size="small">
                 <Grid container>
                   <Grid item xs={5}>
@@ -137,6 +102,38 @@ const Game = () => {
               </FormControl>
               <Button></Button>
             </Grid>
+            <Grid>
+           {Array.from({length: numberOfSettings}, (x, i) => i).map((a,i) =>
+            <Grid item xs={6} mt={0.7}>
+              <FormControl size="small">
+                <Grid container>
+                  <Grid item xs={9}>
+                    <Typography mt={1}>{i+1}. Select Settings:</Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Select
+                      value={listOfSettings?.find((param: any) => param.isSelected === true && param.settingNumber === i+1 && param.study._id === study?._id)}
+                      onChange={async(event: any) => {
+                        await axios.put(`${process.env.REACT_APP_API_URL}api/selectSettings/${event.target.value._id}?studyId=${study._id}&settingNumber=${i+1}`).then((response) => {});
+                        window.location.reload();
+                      }}
+                      sx={{ width: 200 }}
+                    >
+                      {listOfSettings?.filter((set:any) => set.study._id === study?._id)
+                      .map((param) => (
+                        //@ts-ignore
+                        <MenuItem key={param._id} value={param}>
+                          {/* @ts-ignore */}
+                          {param.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Grid>
+                </Grid>
+              </FormControl>
+            </Grid>
+         )}
+         </Grid>
           </Grid>
           <Box textAlign="center" mt={2}>
             <Button

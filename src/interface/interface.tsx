@@ -21,6 +21,11 @@ export interface Parameters {
   humanRandomSeed: number;
 }
 
+export interface StudyInfo {
+  name: string;
+  _id: string;
+  numberOfSettings: number;
+}
 export interface GameModeSettings {
   _id?: string;
   name: string;
@@ -29,6 +34,8 @@ export interface GameModeSettings {
   isSelected: Boolean;
   training: Parameters;
   session: Parameters;
+  study: StudyInfo;
+  settingNumber: number | null; 
 }
 
 export const defaultSettings = {
@@ -36,6 +43,12 @@ export const defaultSettings = {
   note:"",
   createdBy: "Default",
   isSelected: false,
+  study: {
+    name: "",
+    numberOfSettings: 1,
+    _id: "",
+  },
+  settingNumber: null,
   training: {
       maxWaves: 2,
       waveParameters: [

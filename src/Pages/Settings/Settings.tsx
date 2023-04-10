@@ -12,6 +12,7 @@ import {
   FormControl,
   Select,
   MenuItem,
+  InputLabel,
 } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -71,11 +72,13 @@ const Settings = () => {
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [listOfSettings, setListOfSettings] = React.useState<GameModeSettings[]>([]);
+  const [listOfStudies, setListOfStudies] = React.useState<any>([]);
   const [settings, setSettings] = React.useState<GameModeSettings>(defaultSettings);
   const [enableCreateSettingsButton, setEnableCreateSettingsButton] = React.useState(false);
   const [createMode, setCreateMode] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [createSettingsForm, setCreateSettingsForm] = React.useState({
+    study:"",
     name: "",
     note: ""
   })
@@ -95,16 +98,19 @@ const Settings = () => {
         setListOfSettings(response.data)
         setSettings(response.data.find((param:any) => param.isSelected === true))
       });
+      axios.get(`${process.env.REACT_APP_API_URL}api/getStudies`).then((response) => {
+        setListOfStudies(response.data)
+      });
   }, []);
 
   const onCreateSettingsButton = () => {
     setOpen(false);
     setCreateMode(true);
-    setSettings({...defaultSettings, name: createSettingsForm.name, note: createSettingsForm.note, createdBy: admin})
+    setSettings({...defaultSettings, name: createSettingsForm.name, note: createSettingsForm.note, createdBy: admin, settingNumber: null, study: {...defaultSettings.study, _id: createSettingsForm.study}  })
   };
 
   const onCreateSettings = async () => {
-    setOpenConfirm(false)
+    setOpenConfirm(false);
     await axios
       .post(`${process.env.REACT_APP_API_URL}api/createSettings`, settings)
       .then((response) => {
@@ -116,7 +122,7 @@ const Settings = () => {
   const onSettingsSelect = (event:any) => {
     setSettings(event.target.value);
   };
-  console.log(settings)
+console.log(settings);
   return (
     <div className="Settings">
       <ResponsiveAppBar />
@@ -129,12 +135,25 @@ const Settings = () => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <Box>
+          <Box mt={2}>
+            <InputLabel id="demo-simple-select-label">Select study</InputLabel>
+            <Select
+              value={createSettingsForm.study}
+              onChange={(event: any) => {
+                setCreateSettingsForm({...createSettingsForm, study: event.target.value})
+              }}
+              size="small"
+              fullWidth
+            >
+              {listOfStudies.map((study:any) => <MenuItem value={study._id}>{study.name}</MenuItem>)}
+            </Select>
+            </Box>
+            <Box mt={2}>
+            <InputLabel id="demo-simple-select-label">Enter settings name</InputLabel>
               <TextField
                 required
                 fullWidth
                 id="outlined-basic"
-                label="Enter settings name"
                 variant="outlined"
                 color="primary"
                 size="small"
@@ -151,6 +170,7 @@ const Settings = () => {
               />
             </Box>
             <Box mt={2}>
+            <InputLabel id="demo-simple-select-label">Enter note</InputLabel>
               <TextField
               fullWidth
                 id="outlined-multiline-static"
@@ -158,7 +178,6 @@ const Settings = () => {
                 size="small"
                 rows={3}
                 variant="outlined"
-                label="Enter note..."
                 // value={settings.note}
                 onChange={(event) => {
                   // setSettings({ ...settings, note: event.target.value });
@@ -217,6 +236,7 @@ const Settings = () => {
       </Grid>
 
       <Box mt={2}><Typography fontSize={30}>{settings?.name}</Typography></Box>
+      <Grid item xs={6}><Typography fontSize={13}>Study: {settings?.study?.name}</Typography></Grid>
       <Grid container>
       {settings?.note && <Grid item xs={6}><Typography fontStyle={"italic"} fontSize={13}>Note: {settings?.note}</Typography></Grid>}
       <Grid item xs={6} textAlign={"right"}><Typography fontSize={13}>Created by: {settings?.createdBy}</Typography></Grid>

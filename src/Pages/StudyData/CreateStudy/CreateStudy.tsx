@@ -7,6 +7,9 @@ import {
   Grid,
   Modal,
   TextField,
+  Select,
+  MenuItem,
+  InputLabel
 } from "@mui/material";
 
 const style = {
@@ -25,9 +28,11 @@ const CreateStudy = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpenCreateStudy = () => setOpen(true);
   const admin = localStorage.getItem("token");
+  const numberOfSettingsArray = [1,2,3,4,5,6,7,8,9,10];
   const [studyData, setStudyData] = React.useState({
     name: "",
     info: "",
+    numberOfSettings: 1,
     createdBy: admin,
     createdAt: Date(),
   });
@@ -45,8 +50,12 @@ const CreateStudy = () => {
       ...studyData,
       name: "",
       info: "",
+      numberOfSettings: 1,
     });
     window.location.reload();
+  };
+  const onNumberOfSettingsChange = (event: any) => {
+    console.log(event.target.value);
   };
   return (
     <>
@@ -59,11 +68,11 @@ const CreateStudy = () => {
         >
           <Box sx={style}>
             <Box>
+            <InputLabel id="demo-simple-select-label">Enter study name</InputLabel>
               <TextField
                 required
                 fullWidth
                 id="outlined-basic"
-                label="Enter study name"
                 variant="outlined"
                 color="primary"
                 size="small"
@@ -79,6 +88,20 @@ const CreateStudy = () => {
               />
             </Box>
             <Box mt={2}>
+            <InputLabel id="demo-simple-select-label">Select number of settings</InputLabel>
+            <Select
+              value={1}
+              onChange={(event: any) => {
+                setStudyData({ ...studyData, numberOfSettings: event.target.value });
+              }}
+              size="small"
+              fullWidth
+            >
+              {numberOfSettingsArray.map((num) => <MenuItem value={num}>{num}</MenuItem>)}
+            </Select>
+            </Box>
+            <Box mt={2}>
+            <InputLabel id="demo-simple-select-label">Enter note</InputLabel>
               <TextField
               fullWidth
                 id="outlined-multiline-static"
@@ -86,7 +109,6 @@ const CreateStudy = () => {
                 size="small"
                 rows={3}
                 variant="outlined"
-                label="Enter note..."
                 value={studyData.info}
                 onChange={(event) => {
                   setStudyData({ ...studyData, info: event.target.value });
