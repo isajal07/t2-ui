@@ -373,7 +373,7 @@ const Training = (props: Props) => {
               <Grid item xs={3}>
             <InputSlider
               silderName="Penalty"
-              min={1}
+              min={0}
               max={10}
               step={1}
               textFontSize={12}
@@ -473,7 +473,7 @@ const Training = (props: Props) => {
               silderName="Minimum Interval Between Rule Changes"
               min={0.00}
               max={200.00}
-              step={20}
+              step={1}
               textFontSize={12}
               onChange={(
                 event: Event,
@@ -496,7 +496,7 @@ const Training = (props: Props) => {
               silderName="Maximum Interval Between Rule Changes"
               min={0.00}
               max={400.00}
-              step={20}
+              step={1}
               textFontSize={12}
               onChange={(
                 event: Event,
