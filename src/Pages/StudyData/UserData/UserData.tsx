@@ -10,7 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useParams } from "react-router";
-import { DateTime } from "luxon";
+import TablePagination from "@mui/material/TablePagination";
 import ResponsiveAppBar from "../../../Components/AppBar/AppBar";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -36,16 +36,28 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const UserData = () => {
   const { userGameDataId, studyDataName } = useParams();
   const [userGameData, setUserGameData] = React.useState<any>({});
+  const [rowsPerPage, setRowsPerPage] = React.useState(20);
+  const [page, setPage] = React.useState(0);
 
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   React.useEffect(() => {
     axios
-      .get(
-        `${process.env.REACT_APP_API_URL}api/getUserGameData/${userGameDataId}`
+    .get(
+      `${process.env.REACT_APP_API_URL}api/getUserGameData/${userGameDataId}`
       )
       .then((response) => {
         setUserGameData(response.data);
       });
     }, [userGameDataId]);
+    
+    const handleChangePage = (event: unknown, newPage: number) => {
+      setPage(newPage);
+    };
+
+  // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userGameData.length) : 0;
 
   return (
     <Box>
@@ -53,20 +65,31 @@ const UserData = () => {
       {userGameData ? (
         <Container>
           <Box mt={3}>
-          <Grid container>
-          <Grid item xs={4}>
-            <Typography><b>Alias name:</b> {userGameData.name} </Typography>
-            <Typography><b>Date:</b> Apr 20, 2023 </Typography>
-            </Grid>
-            <Grid item xs={4}>
-            <Typography><b>White Hat Score:</b> {userGameData.whitehatScore}</Typography>
-            <Typography><b>Black Hat Score:</b> {userGameData.blackhatScore}</Typography>
-            </Grid>
-            <Grid item xs={4}>
-            <Typography><b>Settings</b>: {userGameData.settingsId?.name}</Typography>
-            <Typography><b>Study:</b> {studyDataName}</Typography>
-
-            </Grid>
+            <Grid container>
+              <Grid item xs={4}>
+                <Typography>
+                  <b>Alias name:</b> {userGameData.name}{" "}
+                </Typography>
+                <Typography>
+                  <b>Date:</b> Apr 20, 2023{" "}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography>
+                  <b>White Hat Score:</b> {userGameData.whitehatScore}
+                </Typography>
+                <Typography>
+                  <b>Black Hat Score:</b> {userGameData.blackhatScore}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography>
+                  <b>Settings</b>: {userGameData.settingsId?.name}
+                </Typography>
+                <Typography>
+                  <b>Study:</b> {studyDataName}
+                </Typography>
+              </Grid>
             </Grid>
             <Box>
               <Box mt={2} mb={5}>
@@ -74,20 +97,24 @@ const UserData = () => {
                   <Table sx={{ minWidth: 700 }} aria-label="customized table">
                     <TableHead>
                       <TableRow>
-                      <StyledTableCell>SN</StyledTableCell>
+                        <StyledTableCell>SN</StyledTableCell>
                         <StyledTableCell>Time</StyledTableCell>
                         <StyledTableCell align="center">Event</StyledTableCell>
-                        <StyledTableCell align="center">Event Modifiers</StyledTableCell>
+                        <StyledTableCell align="center">
+                          Event Modifiers
+                        </StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {userGameData?.records?.map((event: any, index: any) => (
+                      {userGameData?.records?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((event: any, index: any) => (
                         <StyledTableRow key={event.time} hover={true}>
                           <StyledTableCell component="th" scope="row">
                             {index}.
                           </StyledTableCell>
                           <StyledTableCell component="th" scope="row">
-                          {event.secondsFromStart - userGameData?.records[0]?.secondsFromStart}
+                            {event.secondsFromStart -
+                              userGameData?.records[0]?.secondsFromStart}
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             {event.eventName}
@@ -99,6 +126,15 @@ const UserData = () => {
                       ))}
                     </TableBody>
                   </Table>
+                  <TablePagination
+                    rowsPerPageOptions={[20, 40, 60]}
+                    component="div"
+                    count={userGameData?.records?.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
                 </TableContainer>
               </Box>
             </Box>
