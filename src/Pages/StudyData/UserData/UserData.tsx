@@ -12,6 +12,7 @@ import Paper from "@mui/material/Paper";
 import { useParams } from "react-router";
 import TablePagination from "@mui/material/TablePagination";
 import ResponsiveAppBar from "../../../Components/AppBar/AppBar";
+import DataAnalysis from "./DataAnalysis/DataAnalysis";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -57,8 +58,6 @@ const UserData = () => {
       setPage(newPage);
     };
 
-  // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userGameData.length) : 0;
-
   return (
     <Box>
       <ResponsiveAppBar />
@@ -71,7 +70,7 @@ const UserData = () => {
                   <b>Alias name:</b> {userGameData.name}{" "}
                 </Typography>
                 <Typography>
-                  <b>Date:</b> Apr 20, 2023{" "}
+                  <b>Group :</b> {userGameData.group}
                 </Typography>
               </Grid>
               <Grid item xs={4}>
@@ -91,6 +90,7 @@ const UserData = () => {
                 </Typography>
               </Grid>
             </Grid>
+            <DataAnalysis userGameData={userGameData}/>
             <Box>
               <Box mt={2} mb={5}>
                 <TableContainer component={Paper}>
@@ -110,7 +110,7 @@ const UserData = () => {
                       .map((event: any, index: any) => (
                         <StyledTableRow key={event.time} hover={true}>
                           <StyledTableCell component="th" scope="row">
-                            {index}.
+                            {index + 1}.
                           </StyledTableCell>
                           <StyledTableCell component="th" scope="row">
                             {event.secondsFromStart -
@@ -127,7 +127,7 @@ const UserData = () => {
                     </TableBody>
                   </Table>
                   <TablePagination
-                    rowsPerPageOptions={[20, 40, 60]}
+                    rowsPerPageOptions={[10, 20, 40, 60]}
                     component="div"
                     count={userGameData?.records?.length}
                     rowsPerPage={rowsPerPage}
