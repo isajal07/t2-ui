@@ -90,7 +90,7 @@ const UserData = () => {
                 </Typography>
               </Grid>
             </Grid>
-            {/* <DataAnalysis userGameData={userGameData}/> */}
+            <DataAnalysis userGameData={userGameData}/>
             <Box>
               <Box mt={2} mb={5}>
                 <TableContainer component={Paper}>
