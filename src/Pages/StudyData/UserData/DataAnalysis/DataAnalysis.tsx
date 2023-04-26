@@ -9,7 +9,6 @@ export interface Props {
 
 const DataAnalysis = (props: Props) => {
   const { records } = props.userGameData;
-console.log(records)
   const refactorRecords = (records: any) => {
     let abc = [];
     let currentGroup = [];
@@ -73,7 +72,7 @@ console.log(records)
     }))
 
     if(tt.length > 6) tt.pop();
-    
+
     return tt;
   };
 
