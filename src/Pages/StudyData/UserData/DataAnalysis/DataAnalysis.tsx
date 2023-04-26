@@ -65,13 +65,15 @@ console.log(records)
     const tt = result.map((res:any)=> res.map((r:any)=> {
         return {
             ...r,
-            avgLat: mean(r.latencySet),
-            SD: std(r.latencySet),
-            min: min(r.latencySet),
-            max: max(r.latencySet),
+            avgLat: r.latencySet.length != 0 && mean(r.latencySet),
+            SD: r.latencySet.length != 0 && std(r.latencySet),
+            min: r.latencySet.length != 0 && min(r.latencySet),
+            max: r.latencySet.length != 0 && max(r.latencySet),
         }
     }))
 
+    if(tt.length > 6) tt.pop();
+    
     return tt;
   };
 
