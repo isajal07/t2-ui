@@ -82,7 +82,7 @@ console.log(records)
     <Box>
       <Box style={{border: "solid 1px"}}>
         <Box m={2}>
-            <Typography fontSize={18} fontWeight={5} textAlign={"center"}>States</Typography>
+            <Typography fontSize={18} fontWeight={5} textAlign={"center"}>Stats</Typography>
             <Divider/>
             <Box mt={2} mb={2}>
                 {refactoredRecords?.map((rr:any, index:any) => <>
